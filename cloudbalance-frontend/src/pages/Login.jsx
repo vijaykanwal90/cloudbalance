@@ -1,7 +1,9 @@
 import React from "react";
+import LoginFooter from "../components/footers/LoginFooter";
 
 const Login = () => {
   return (
+    <>
     <div className="w-80 mt-48 mx-auto ">
       <div className=" w-full flex flex-col gap-6 items-center ">
         <div className="mx-auto relative">
@@ -28,6 +30,8 @@ const Login = () => {
         </button>
       </div>
     </div>
+    <LoginFooter/>
+    </>
   );
 };
 

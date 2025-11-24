@@ -1,0 +1,61 @@
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { SidebarContext } from "../context/SidebarContext";
+import PersonIcon from "@mui/icons-material/Person";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+const sidebarList = [
+  {
+    id: 1,
+    icon: <PersonIcon />,
+    path: "/dashboard/users",
+    label: "Users",
+  },
+  {
+    id: 2,
+    icon: <ViewModuleIcon />,
+    path: "/dashboard/module",
+    label: "Module Control Grid",
+  },
+  {
+    id: 3,
+    icon: <DashboardIcon />,
+    path: "/dashboard/dashboard-grid",
+    label: "Dashboard Control Grid",
+  },
+];
+
+const Sidebar = () => {
+  const { isCollapased } = useContext(SidebarContext);
+  return (
+    <>
+      <div
+        className={`${
+          !isCollapased && "w-full"
+        } bg-white h-screen z-10 border-r-2 border-gray-500 relative  `}
+      >
+        <ul className="flex flex-col px-2 gap-2 py-2">
+          {sidebarList.map((item) => {
+            return (
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `${
+                    isActive ? "bg-sky-200" : "bg-white"
+                  } text-gray-700 px-3 py-2 rounded`
+                }
+                key={item.id}
+              >
+                {item.icon}
+
+                <span className={isCollapased ? "hidden" : ""}>{item.label}</span>
+              </NavLink>
+            );
+          })}
+        </ul>
+      </div>
+    </>
+  );
+};
+
+export default Sidebar;
