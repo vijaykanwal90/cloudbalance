@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DashboardFooter from "../components/footers/DashboardFooter";
@@ -8,8 +8,9 @@ import {
   SidebarContextProvider,
 } from "../context/SidebarContext";
 const Dashboard = () => {
+  console.log("hello")
   return (
-    <div className="">
+    <>
       <SidebarContextProvider>
         <Navbar />
         <div className="flex">
@@ -19,13 +20,13 @@ const Dashboard = () => {
 
           <div className=" h-screen bg-slate-300 py-4  grow">
             <div className="w-full">
-            {/* <Outlet /> */}
+            <Outlet />
             <DashboardFooter />
             </div>
           </div>
         </div>
       </SidebarContextProvider>
-    </div>
+    </>
   );
 };
 

@@ -1,29 +1,20 @@
-import Login from './pages/Login'
-
-import './App.css'
-import LoginFooter from './components/footers/LoginFooter'
-import Navbar from './components/Navbar'
-import { BrowserRouter,Route, Routes } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import ProtectedRoutes from './Routes/ProtectedRoutes'
+import Login from "./pages/Login";
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoutes from "./Routes/ProtectedRoutes";
 function App() {
- 
-
   return (
     <>
-    {/* <Login/>
-    <LoginFooter/> */}
-    <BrowserRouter>
-    <Routes>
-    <Route path="/dashboard" element={<Dashboard />}>
-  <Route path='*' element={<ProtectedRoutes/>}/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/dashboard/*" element={<ProtectedRoutes />}></Route>
 
-    </Route>
-    <Route path='/login' element={<Login/>}/>
-    </Routes>
-    </BrowserRouter>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
