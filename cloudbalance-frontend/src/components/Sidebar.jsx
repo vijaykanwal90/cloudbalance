@@ -14,14 +14,20 @@ const sidebarList = [
   {
     id: 2,
     icon: <ViewModuleIcon />,
-    path: "/dashboard/module",
-    label: "Module Control Grid",
+    path: "/dashboard/onboarding",
+    label: "Onboarding",
   },
   {
     id: 3,
     icon: <DashboardIcon />,
-    path: "/dashboard/dashboard-grid",
-    label: "Dashboard Control Grid",
+    path: "/dashboard/cost-explorer",
+    label: "Cost Explorer",
+  },
+  {
+    id: 4,
+    icon: <DashboardIcon />,
+    path: "/dashboard/aws-services",
+    label: "AWS Services ",
   },
 ];
 
