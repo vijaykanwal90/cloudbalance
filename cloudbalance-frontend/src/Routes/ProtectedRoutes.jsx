@@ -1,16 +1,17 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Users from "../components/dashboard-components/Users";
+import Users from "../components/dashboard-components/UserManagement";
 import Dashboard from "../pages/Dashboard";
 import Onboarding from "../components/dashboard-components/Onboarding";
 import CostExplorer from "../components/dashboard-components/CostExplorer";
 import AWSServices from "../components/dashboard-components/AWSServices";
+import UserManagement from "../components/dashboard-components/UserManagement";
 
 const routesList = [
   {
     id: 1,
-    element: <Users/>,
-    path: "users",
+    element: <UserManagement/>,
+    path: "user-management",
     label: "Users",
   },
   {

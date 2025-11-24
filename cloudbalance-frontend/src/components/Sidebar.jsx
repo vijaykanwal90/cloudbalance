@@ -8,8 +8,8 @@ const sidebarList = [
   {
     id: 1,
     icon: <PersonIcon />,
-    path: "/dashboard/users",
-    label: "Users",
+    path: "/dashboard/user-management",
+    label: "User Management",
   },
   {
     id: 2,

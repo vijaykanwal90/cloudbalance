@@ -7,8 +7,9 @@ import {
   SidebarContext,
   SidebarContextProvider,
 } from "../context/SidebarContext";
+import Breadcrumb from "../BreadCrums/BreadCrum";
 const Dashboard = () => {
-  console.log("hello")
+  
   return (
     <>
       <SidebarContextProvider>
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
           <div className=" h-screen bg-slate-300 py-4  grow">
             <div className="w-full">
+              <Breadcrumb/>
             <Outlet />
             <DashboardFooter />
             </div>
