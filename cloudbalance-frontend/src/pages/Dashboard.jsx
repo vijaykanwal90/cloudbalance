@@ -14,12 +14,12 @@ const Dashboard = () => {
     <>
       <SidebarContextProvider>
         <Navbar />
-        <div className="flex">
-          <div className="flex-none">
+        <div className="flex h-screen">
+          <div className="flex-none ">
             <Sidebar />
           </div>
 
-          <div className=" h-screen bg-slate-300 py-4  grow">
+          <div className="overflow-y-auto bg-slate-300 py-4  grow">
             <div className="w-full">
               <Breadcrumb/>
             <Outlet />
