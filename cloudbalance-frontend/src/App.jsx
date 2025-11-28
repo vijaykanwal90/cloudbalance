@@ -3,9 +3,11 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoutes from "./Routes/ProtectedRoutes";
+import { Toaster } from 'sonner';
 function App() {
   return (
     <>
+    <Toaster richColors/>
       <BrowserRouter>
         <Routes>
           <Route path="/dashboard/*" element={<ProtectedRoutes />}></Route>

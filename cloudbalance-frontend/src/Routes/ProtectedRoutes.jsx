@@ -71,7 +71,7 @@ const ProtectedRoutes = () => {
 
         </Route>
         <Route>
-          <Route path="cost-explorer" element={<Onboarding/>}/>
+          <Route path="cost-explorer" element={<CostExplorer/>}/>
 
         </Route>
         <Route>
