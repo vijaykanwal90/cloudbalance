@@ -5,6 +5,8 @@ import { breadCrumEnumLink } from '../Enums/BreadCrumLinks';
  const  Breadcrumb = () =>{
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x).slice(1);
+  // const pathnames = location.pathname.split('/').filter((x) => x);
+
 
   return (
     <nav className='border-b-2 border-gray-400'>

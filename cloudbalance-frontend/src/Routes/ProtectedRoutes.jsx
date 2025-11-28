@@ -52,7 +52,7 @@ const ProtectedRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />}>
-        <Route index element={<Users />} />
+        <Route index element={<UserTable />} />
         {/* {routesList.map((route) => {
           return (
             <Route key={route.id} path={route.path} element={route.element} />
