@@ -8,7 +8,7 @@ const DashboardFooter = () => {
 
       
       <span className=''>Cloudkeeper 2025 | All Rights Reserved</span>
-      <span className={`${isCollapsed ? "mr-2" : "mr-64"} transition-all duration-300`}>
+      <span className={`${isCollapsed ? "mr-8" : "mr-64"} transition-all duration-300`}>
         Contact Us
       </span>
     </div>

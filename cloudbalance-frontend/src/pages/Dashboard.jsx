@@ -14,7 +14,7 @@ const Dashboard = () => {
     <>
       <SidebarContextProvider>
         <Navbar />
-        <div className="flex h-screen">
+        <div className="flex h-screen pt-16">
           <div className="flex-none ">
             <Sidebar />
           </div>

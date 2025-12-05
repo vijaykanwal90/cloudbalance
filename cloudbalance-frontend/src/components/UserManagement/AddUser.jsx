@@ -39,14 +39,14 @@ const AddUser = () => {
     }
   };
 
-  console.log(form);
+ 
   return (
     <div className="grid grid-cols-2 w-8/12 h-[35vh] bg-white p-4 rounded-md my-4 py-8 px-8 gap-4">
       <div className="flex flex-col">
         <label htmlFor="email">First Name</label>
         <input
           type="text"
-          className="border-2 border-gray-300 px-2 rounded-sm"
+          className="border-2 border-gray-300 px-2 rounded-sm py-2"
           placeholder="Enter your first Name"
           required
           name="firstName"
@@ -59,7 +59,7 @@ const AddUser = () => {
         <input
           type="text"
           name="lastName"
-          className="border-2 border-gray-300 px-2 rounded-sm"
+          className="border-2 border-gray-300 px-2 rounded-sm py-2"
           placeholder="Enter your first Name"
           required
           onChange={handleChange}
@@ -70,7 +70,7 @@ const AddUser = () => {
         <label htmlFor="email"> Email Id</label>
         <input
           type="text"
-          className="border-2 border-gray-300 px-2 rounded-sm"
+          className="border-2 border-gray-300 px-2 rounded-sm py-2"
           placeholder="Enter your first Name"
           required
           name="emailId"
@@ -85,7 +85,7 @@ const AddUser = () => {
           onClick={() => {
             setIsDropdownOpen(!isDropdownOpen);
           }}
-          className="border-2 border-gray-300 px-2 rounded-sm"
+          className="border-2 border-gray-300 px-2 rounded-sm py-2"
         >
           <span>
             {form.roles.length > 0 ? form.roles.join(", ") : "Select roles"}

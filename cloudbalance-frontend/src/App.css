@@ -1,10 +1,30 @@
- #root {
+#root {
   max-width: 100%;
   margin: 0 auto;
   /* padding: 2rem; */
-
 }
-
-
+.input-boxes {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+.stepCounter {
+  color: white;
+  background: #7a8db5;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  
+  margin-right: 12px;
+}
 
 /* @import "tailwindcss";  */

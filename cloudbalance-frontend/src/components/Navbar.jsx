@@ -10,7 +10,7 @@ const Navbar = () => {
     const {isCollapased, toggleisCollapased} = useContext(SidebarContext)
   
   return (
-    <div className="w-full relative flex justify-between py-4 px-6 shadow-gray-300 shadow-lg overflow-visible z-30">
+    <div className="w-full fixed top-0 left-0 flex justify-between py-4 px-6 h-16 bg-white shadow-gray-300 shadow-lg  z-30">
       <div className="flex items-center gap-6 z-30">
         <div className="mx-auto relative">
           <img src="/cloudkeeper_logo.svg" alt="Cloudkeeper" />
@@ -43,7 +43,7 @@ const Navbar = () => {
           </main>
         </div>
 
-        <button className="text-sky-700 border-3 rounded-md px-2 font-bold">
+        <button className="text-sky-700 border-3 rounded-md px-2 font-bold cursor-pointer hover:text-white hover:bg-sky-700">
           <span>
             <LogoutIcon />
           </span>

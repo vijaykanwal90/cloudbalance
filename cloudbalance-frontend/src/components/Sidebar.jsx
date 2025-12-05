@@ -37,8 +37,9 @@ const Sidebar = () => {
     <>
       <div
         className={`${
-          !isCollapased && "w-full"
-        } bg-white  z-10 border-r-2 border-gray-500 relative h-full `}
+          isCollapased ? " w-20" : " opacity-100 w-64"}
+        } bg-white  z-10 border-r-2 border-gray-500 relative h-full transition-all duration-300 ease-in-out whitespace-nowrap
+    overflow-hidden `}
       >
         <ul className="flex flex-col px-2 gap-2 py-2">
           {sidebarList.map((item) => {
