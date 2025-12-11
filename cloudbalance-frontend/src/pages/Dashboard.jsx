@@ -9,7 +9,6 @@ import {
 } from "../context/SidebarContext";
 import Breadcrumb from "../BreadCrums/BreadCrum";
 const Dashboard = () => {
-  
   return (
     <>
       <SidebarContextProvider>
@@ -21,9 +20,9 @@ const Dashboard = () => {
 
           <div className="overflow-y-auto bg-slate-300 py-4  grow">
             <div className="w-full">
-              <Breadcrumb/>
-            <Outlet />
-            <DashboardFooter />
+              <Breadcrumb />
+              <Outlet />
+              <DashboardFooter />
             </div>
           </div>
         </div>

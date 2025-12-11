@@ -48,7 +48,7 @@ const Login = () => {
     }
     return true;
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     const isEmailValid = validateEmail(form.email);
@@ -60,6 +60,7 @@ const Login = () => {
     if (!isPasswordValid) {
       return;
     }
+    const res = await axios.post();
     toast.success("email and password are valid");
   };
 
