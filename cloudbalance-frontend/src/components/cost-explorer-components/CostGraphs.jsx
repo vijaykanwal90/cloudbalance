@@ -29,7 +29,7 @@ const CostGraphs = () => {
 
             <button className="cursor-pointer">End</button>
           </div>
-          <div className="border bg-blue-200 cursor-pointer">
+          <div className="border rounded-sm bg-white cursor-pointer text-gray-600 flex gap-1">
             <BarChartIcon
               onClick={() => {
                 changeGraphType("bar-graph");

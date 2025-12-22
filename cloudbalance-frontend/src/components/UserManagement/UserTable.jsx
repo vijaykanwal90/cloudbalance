@@ -174,7 +174,7 @@ const userData = [
 
 const UserTable = () => {
   return (
-    <>
+    <div  className="pl-4 mt-4 pb-4">
       <Link to="/dashboard/user-management/add-user">
         <button className="px-4 py-2 bg-sky-600  rounded-md text-white cursor-pointer">
           Add User
@@ -227,7 +227,7 @@ const UserTable = () => {
           })}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ const SideFilter = ({ sideFilterOpen, filterList }) => {
     setFilterSectionBox(!filterSelectionBox);
   };
   return (
-    <div className="">
+    <div className="min-h-0">
       <div className={`flex justify-between font-bold items-center pt-2 `}>
         <span> Filters</span>
         <button className="text-blue-800 cursor-pointer">

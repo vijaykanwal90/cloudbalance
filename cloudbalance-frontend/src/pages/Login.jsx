@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoginFooter from "../components/footers/LoginFooter";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
-
+import { BASE_URL } from "../constants/constants";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { validateEmail } from "../utils/formValidation";
 const Login = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
- 
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -23,18 +27,7 @@ const Login = () => {
       setForm((prev) => ({ ...prev, password: value }));
     }
   };
-  function validateEmail(email) {
-    if (email.trim() === "") {
-      toast.error("Email can't be empty");
-      return false;
-    }
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailPattern.test(email)) {
-      toast.error("email  is not  valid");
-      return false;
-    }
-    return true;
-  }
+  
   function validatePassword(password) {
     password = password.trim();
 
@@ -48,7 +41,7 @@ const Login = () => {
     }
     return true;
   }
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isEmailValid = validateEmail(form.email);
@@ -60,10 +53,29 @@ const Login = () => {
     if (!isPasswordValid) {
       return;
     }
-    const res = await axios.post();
-    toast.success("email and password are valid");
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/auth/login`,
+        {
+          email: form.email,
+          password: form.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res);
+     if(res.status==200){
+      setIsLoggedIn(true);
+      navigate("/dashboard");
+     }
+      
+      toast.success("email and password are valid");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
-
+  useEffect(() => {}, [isLoggedIn, navigate]);
   return (
     <>
       <form className="w-80 mt-48 mx-auto " onSubmit={handleSubmit}>

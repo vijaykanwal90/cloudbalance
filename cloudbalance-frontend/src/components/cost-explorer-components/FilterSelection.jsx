@@ -27,7 +27,7 @@ const FilterSelection = ({
   ];
 
   return (
-    <div className="z-50 bg-white">
+    <div className="z-50 bg-white min-h-0">
       <span>No filters currently added.</span>
       <div>
         <input

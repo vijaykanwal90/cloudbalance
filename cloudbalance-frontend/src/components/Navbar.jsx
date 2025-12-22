@@ -6,8 +6,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { SidebarContextProvider } from "../context/SidebarContext";
 import { SidebarContext } from "../context/SidebarContext";
 import CloseIcon from '@mui/icons-material/Close';
+
+import { BASE_URL } from "../constants/constants";
+import { useLogout } from "../hooks/useLogout";
+
 const Navbar = () => {
+  // const navigate = useNavigate();
     const {isCollapased, toggleisCollapased} = useContext(SidebarContext)
+    const logout = useLogout();
   
   return (
     <div className="w-full fixed top-0 left-0 flex justify-between py-4 px-6 h-16 bg-white shadow-gray-300 shadow-lg  z-30">
@@ -43,7 +49,9 @@ const Navbar = () => {
           </main>
         </div>
 
-        <button className="text-sky-700 border-3 rounded-md px-2 font-bold cursor-pointer hover:text-white hover:bg-sky-700">
+        <button className="text-blue-800 border-2 rounded-md px-2  font-bold cursor-pointer  hover:bg-sky-[#F2F9FF] hover:shadow-md shadow-gray-500 hover:border-transparent  box-border" 
+         onClick={logout}
+        >
           <span>
             <LogoutIcon />
           </span>
