@@ -1,6 +1,6 @@
 package com.cloudbalance.cloudbalance_backend.service;
 
-import com.cloudbalance.cloudbalance_backend.dto.UserDto;
+import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -14,8 +14,8 @@ public class UsersInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("initialized file");
-          UserDto admin = new UserDto();
+
+          CreateUserDto admin = new CreateUserDto();
           admin.setFirstName("admin");
           admin.setLastName("1");
           admin.setEmail("admin@gmail.com");

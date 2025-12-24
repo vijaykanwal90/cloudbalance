@@ -1,6 +1,6 @@
 package com.cloudbalance.cloudbalance_backend.controller;
 
-import com.cloudbalance.cloudbalance_backend.dto.UserDto;
+import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
 import com.cloudbalance.cloudbalance_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,23 +14,23 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id ){
+    public ResponseEntity<CreateUserDto> getUser(@PathVariable Long id ){
 
-        UserDto userDto = userService.getUser(id);
-        return ResponseEntity.ok(userDto);
+        CreateUserDto createUserDto = userService.getUser(id);
+        return ResponseEntity.ok(createUserDto);
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto){
 
-          userService.createUser(userDto);
+          userService.createUser(createUserDto);
           return ResponseEntity.status(201).build();
 
     }
     @PutMapping("/")
-    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto){
-        userService.updateUser(userDto);
-        return ResponseEntity.status(200).body(userDto);
+    public ResponseEntity<?> updateUser(@RequestParam Long id,@RequestBody CreateUserDto createUserDto){
+        userService.updateUser(id, createUserDto);
+        return ResponseEntity.status(200).body(createUserDto);
     }
 
 

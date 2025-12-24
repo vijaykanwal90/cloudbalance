@@ -1,18 +1,16 @@
 package com.cloudbalance.cloudbalance_backend.dto;
 
-import com.cloudbalance.cloudbalance_backend.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class CreateUserDto {
 
     private  String firstName;
     private  String lastName;

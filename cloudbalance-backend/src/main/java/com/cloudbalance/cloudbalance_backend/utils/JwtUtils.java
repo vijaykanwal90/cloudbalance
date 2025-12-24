@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,6 @@ public class JwtUtils {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7); // Remove Bearer prefix
         }
-
         return null;
     }
     public String getJwtFromCookie(HttpServletRequest request){
@@ -54,8 +54,10 @@ public class JwtUtils {
 
     public String generateTokenFromEmail(UserDetails userDetails){
         List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+
         String role = roles.get(0);
 
 
@@ -70,13 +72,24 @@ public class JwtUtils {
 
 
     }
+
+    public String generateTokenFromClaims(Claims claims){
+        String email = claims.getSubject();
+        String role = (String)claims.get("role");
+        return Jwts.builder()
+                .subject(email)
+                .claim("role",role)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key())
+                .compact();
+
+
+    }
+
     public String getEmailFromJwtToken(String token){
         System.out.println("on get Email from token");
-        Claims claims = Jwts.parser()
-                .setSigningKey(key())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = extractTokenClaims(token);
 
 //
         String role = claims.getSubject();
@@ -84,6 +97,15 @@ public class JwtUtils {
         return role;
 
     }
+    public Claims extractTokenClaims(String token){
+        return Jwts.parser()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+    }
+
     public Key key(){
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }

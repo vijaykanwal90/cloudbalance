@@ -1,6 +1,7 @@
 package com.cloudbalance.cloudbalance_backend.service.impl;
 
-import com.cloudbalance.cloudbalance_backend.dto.UserDto;
+import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
+import com.cloudbalance.cloudbalance_backend.dto.UpdateUserDto;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
@@ -24,7 +25,7 @@ public class UserServiceImplementation implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User createUser(UserDto request) {
+    public User createUser(CreateUserDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
              return userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RuntimeException("Problem occured in create User"));
         }
@@ -39,13 +40,13 @@ public class UserServiceImplementation implements UserService {
 
         return userRepository.save(user);
     }
-    public UserDto getUser(Long id) {
+    public CreateUserDto getUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
                         "User not found with id: " + id
                 ));
 
-        UserDto dto = new UserDto();
+        CreateUserDto dto = new CreateUserDto();
 
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
@@ -55,10 +56,31 @@ public class UserServiceImplementation implements UserService {
         return dto;
     }
 
-    public UserDto updateUser(UserDto request){
+    public UpdateUserDto updateUser(Long id, UpdateUserDto request){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "User not found with id: " + id
+                ));
+        if(!request.getFirstName().isEmpty()){
+            user.setFirstName(request.getFirstName());
+        }
+        if(!request.getLastName().isEmpty()){
+            user.setLastName(request.getLastName());
+        }
+        if(!request.getEmail().isEmpty()){
+            user.setEmail(request.getEmail());
+        }
+
+        if(request.getRole() !=null){
+            user.setRole(request.getRole());
+        }
+        userRepository.save(user);
+        return user;
+
 
     }
 
 
 
 }
+
