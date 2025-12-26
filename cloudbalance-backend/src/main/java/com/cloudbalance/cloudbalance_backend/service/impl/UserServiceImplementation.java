@@ -2,6 +2,7 @@ package com.cloudbalance.cloudbalance_backend.service.impl;
 
 import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
 import com.cloudbalance.cloudbalance_backend.dto.UpdateUserDto;
+import com.cloudbalance.cloudbalance_backend.dto.UpdateUserResponseDto;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
@@ -56,11 +57,12 @@ public class UserServiceImplementation implements UserService {
         return dto;
     }
 
-    public UpdateUserDto updateUser(Long id, UpdateUserDto request){
+    public UpdateUserResponseDto updateUser(Long id, UpdateUserDto request){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
                         "User not found with id: " + id
                 ));
+        UpdateUserResponseDto updatedUser = new UpdateUserResponseDto();
         if(!request.getFirstName().isEmpty()){
             user.setFirstName(request.getFirstName());
         }
@@ -74,8 +76,17 @@ public class UserServiceImplementation implements UserService {
         if(request.getRole() !=null){
             user.setRole(request.getRole());
         }
-        userRepository.save(user);
-        return user;
+        User savedUser = userRepository.save(user);
+        UpdateUserResponseDto response = new UpdateUserResponseDto();
+        response.setId(savedUser.getId());
+        response.setFirstName(savedUser.getFirstName());
+        response.setLastName(savedUser.getLastName());
+        response.setEmail(savedUser.getEmail());
+        response.setRole(savedUser.getRole());
+
+        return response;
+
+
 
 
     }

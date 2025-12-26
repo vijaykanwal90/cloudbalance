@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AuthService {
     public ResponseEntity<?> authenticate(LoginRequestDto loginRequestDto);
-    public ResponseCookie logout ();
+    public ResponseEntity<?> logout ();
     public boolean checkIsLoggedIn();
 }

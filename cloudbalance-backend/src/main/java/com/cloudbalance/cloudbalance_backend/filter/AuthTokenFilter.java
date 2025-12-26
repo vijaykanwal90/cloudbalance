@@ -28,7 +28,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String jwt = parseJwt(request);
+            String jwt = jwtUtils.parseJwt(request,"accessToken");
             if(jwt!=null && jwtUtils.validateJwtToken(jwt)){
 
                 String username = jwtUtils.getEmailFromJwtToken(jwt);
@@ -45,24 +45,19 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                String token = jwtUtils.generateTokenFromEmail(userDetails);
+
 
 
 
             }
         } catch (Exception e) {
 //            throw new RuntimeException(e);
-            log.error("Cannot set user authenticated"+e);
+            log.error("JWT authentication failed"+e);
         }
-        System.out.println("no jwt validation required");
+
         filterChain.doFilter(request, response);
     }
-   private String parseJwt(HttpServletRequest request){
-//        String jwt = jwtUtils.getJwtFromHeader(request);
-        String jwt = jwtUtils.getJwtFromCookie(request);
 
-        return jwt;
-   }
 
 
 }

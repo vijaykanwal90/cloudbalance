@@ -1,31 +1,38 @@
 package com.cloudbalance.cloudbalance_backend.controller;
 
 import com.cloudbalance.cloudbalance_backend.dto.LoginRequestDto;
+import com.cloudbalance.cloudbalance_backend.entity.RefreshToken;
+import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.service.AuthService;
+import com.cloudbalance.cloudbalance_backend.service.RefreshTokenService;
 import com.cloudbalance.cloudbalance_backend.utils.JwtUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @Slf4j
+
+
 public class AuthController {
     @Autowired
     private AuthService authService;
+   @Autowired
+    private JwtUtils jwtUtils;
     @Autowired
-    JwtUtils jwtUtils;
+    private RefreshTokenService refreshTokenService;
+
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequestDto) {
@@ -36,11 +43,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
-        ResponseCookie cookie = authService.logout();
-        return ResponseEntity
-                .noContent()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .build();
+        return authService.logout();
+
 
     }
 
@@ -56,6 +60,22 @@ public class AuthController {
 
         return ResponseEntity.status(200).build();
     }
+
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> regenerateToken(HttpServletRequest request){
+//        String refreshToken = Arrays.stream(request.getCookies())
+//                .filter(c -> "refreshToken".equals(c.getName()))
+//                .map(Cookie::getValue)
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("Refresh token missing"));
+        String refreshToken = jwtUtils.parseJwt(request,"refreshToken");
+
+        return refreshTokenService.regenerateToken(refreshToken);
+
+    }
+
+
 
 
 }

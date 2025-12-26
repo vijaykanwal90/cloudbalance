@@ -1,6 +1,8 @@
 package com.cloudbalance.cloudbalance_backend.service;
 
 import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
+import com.cloudbalance.cloudbalance_backend.dto.UpdateUserDto;
+import com.cloudbalance.cloudbalance_backend.dto.UpdateUserResponseDto;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -8,5 +10,5 @@ import org.springframework.stereotype.Service;
 public interface UserService {
      public User createUser(CreateUserDto request);
      public CreateUserDto getUser(Long id);
-     public CreateUserDto updateUser(Long id, CreateUserDto request);
+     public UpdateUserResponseDto updateUser(Long id, UpdateUserDto request);
 }

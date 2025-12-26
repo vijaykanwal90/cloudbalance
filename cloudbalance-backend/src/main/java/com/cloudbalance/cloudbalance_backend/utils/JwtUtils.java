@@ -37,12 +37,12 @@ public class JwtUtils {
         }
         return null;
     }
-    public String getJwtFromCookie(HttpServletRequest request){
+    public String getJwtFromCookie(HttpServletRequest request, String type){
         String token = null;
 
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if ("jwtToken".equals(cookie.getName())) {
+                if (type.equals(cookie.getName())) {
                     token = cookie.getValue();
                     break;
                 }
@@ -52,16 +52,16 @@ public class JwtUtils {
     }
 
 
-    public String generateTokenFromEmail(UserDetails userDetails){
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-
-        String role = roles.get(0);
-
-
-        String email = userDetails.getUsername();
+    public String generateTokenFromEmailAndRole(String email, String role){
+//        List<String> roles = userDetails.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .toList();
+//
+//
+//        String role = roles.get(0);
+//
+//
+//        String email = userDetails.getUsername();
         return Jwts.builder()
                 .subject(email)
                 .claim("role",role)
@@ -86,7 +86,15 @@ public class JwtUtils {
 
 
     }
+    public String extractRole(UserDetails userDetails){
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
 
+
+        String role = roles.get(0);
+        return role;
+    }
     public String getEmailFromJwtToken(String token){
         System.out.println("on get Email from token");
         Claims claims = extractTokenClaims(token);
@@ -126,6 +134,12 @@ public class JwtUtils {
         }
         return false;
 
+    }
+    public String parseJwt(HttpServletRequest request, String type){
+//        String jwt = jwtUtils.getJwtFromHeader(request);
+        String jwt = getJwtFromCookie(request, type);
+
+        return jwt;
     }
 
 }
