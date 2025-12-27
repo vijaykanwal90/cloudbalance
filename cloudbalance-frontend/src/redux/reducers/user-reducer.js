@@ -5,9 +5,17 @@ const initialState = {
 function userReducer (state=initialState, action){
     switch(action.type){
         case ADDUSER:
-            return {state}
+            return {
+                ...state,
+                user: action.payload
+            }
         case REMOVEUSER:
-            return {state}
+            return {
+                ...state,
+                user:null
+            }
+        default :
+            return state;
     }
 
 }

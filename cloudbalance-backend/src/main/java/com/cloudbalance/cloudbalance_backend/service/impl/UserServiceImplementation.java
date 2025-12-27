@@ -7,24 +7,25 @@ import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
 import com.cloudbalance.cloudbalance_backend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import static java.lang.String.valueOf;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
+
+    private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImplementation(UserRepository userRepository,
-                                     PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+
 
     public User createUser(CreateUserDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -62,6 +63,10 @@ public class UserServiceImplementation implements UserService {
                 .orElseThrow(() -> new RuntimeException(
                         "User not found with id: " + id
                 ));
+        Long currentUserId = getCurrentUserId();
+        if (currentUserId.equals(id)) {
+            throw new RuntimeException("You are not allowed to update your own profile");
+        }
         UpdateUserResponseDto updatedUser = new UpdateUserResponseDto();
         if(!request.getFirstName().isEmpty()){
             user.setFirstName(request.getFirstName());
@@ -74,7 +79,7 @@ public class UserServiceImplementation implements UserService {
         }
 
         if(request.getRole() !=null){
-            user.setRole(request.getRole());
+            user.setRole(Role.valueOf(request.getRole()));
         }
         User savedUser = userRepository.save(user);
         UpdateUserResponseDto response = new UpdateUserResponseDto();
@@ -91,6 +96,18 @@ public class UserServiceImplementation implements UserService {
 
     }
 
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        User user = (User) authentication.getPrincipal();
+        return user.getId();
+    }
 
 
 }

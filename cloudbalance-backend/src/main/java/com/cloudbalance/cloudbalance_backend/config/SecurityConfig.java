@@ -3,6 +3,7 @@ package com.cloudbalance.cloudbalance_backend.config;
 import com.cloudbalance.cloudbalance_backend.filter.AuthTokenFilter;
 import com.cloudbalance.cloudbalance_backend.utils.AuthEntryPointJwt;
 import com.cloudbalance.cloudbalance_backend.utils.CustomAccessDeniedHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    AuthEntryPointJwt authEntryPointJwt;
 
-    @Autowired
-    CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final AuthEntryPointJwt authEntryPointJwt;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();

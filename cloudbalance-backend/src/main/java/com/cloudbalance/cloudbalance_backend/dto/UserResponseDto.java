@@ -4,15 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDto {
+public class UserResponseDto {
+    private String firstName;
+    private String lastName;
+    private Instant lastLogin;
     private String email;
     private String role;
-    private String jwtToken;
+
 }

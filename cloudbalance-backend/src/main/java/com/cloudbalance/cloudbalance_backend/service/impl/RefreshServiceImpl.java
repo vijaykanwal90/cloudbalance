@@ -3,11 +3,13 @@ package com.cloudbalance.cloudbalance_backend.service.impl;
 import com.cloudbalance.cloudbalance_backend.entity.RefreshToken;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
+import com.cloudbalance.cloudbalance_backend.exception.RefreshTokenExpiryException;
 import com.cloudbalance.cloudbalance_backend.repository.RefreshTokenRepository;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
 import com.cloudbalance.cloudbalance_backend.service.RefreshTokenService;
 import com.cloudbalance.cloudbalance_backend.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshServiceImpl implements RefreshTokenService {
     @Value("${spring.app.refreshTokenDurationMs}")
     private Long refreshTokenDurationMs;
@@ -35,23 +38,20 @@ public class RefreshServiceImpl implements RefreshTokenService {
     @Value("${spring.app.jwtExpirationMs}")
     private Long jwtExpirationMs;
 
-    @Autowired
-    private JwtUtils jwtUtils;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    //    @Autowired
-//    private RefreshTokenService refreshTokenService;
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private UserRepository userRepository;
+
+    private final JwtUtils jwtUtils;
+
+    private final  AuthenticationManager authenticationManager;
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    private final  UserRepository userRepository;
 
     @Override
     @Transactional
     public ResponseEntity<?> regenerateToken(String refreshToken) {
         // Find refresh token or throw exception
         RefreshToken refreshtoken = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("Refresh token is not in database!"));
+                .orElseThrow(() -> new RefreshTokenExpiryException("Refresh token not found!"));
 
         // Verify expiration
         if (!verifyExpiration(refreshtoken)) {
@@ -74,19 +74,19 @@ public class RefreshServiceImpl implements RefreshTokenService {
         ResponseCookie responseAccessToken = ResponseCookie
                 .from("accessToken", newAccessToken)
                 .httpOnly(true)
-                .secure(true)  // Added for production
+                .secure(false)  // Added for production
                 .path("/")
                 .maxAge(jwtExpirationMs / 1000)
-                .sameSite("None")  // Changed from Strict for cross-site requests
+                .sameSite("Lax")
                 .build();
 
         ResponseCookie responseRefreshToken = ResponseCookie
                 .from("refreshToken", newrefreshToken)
                 .httpOnly(true)
-                .secure(true)  // Added for production
+                .secure(false)  // Added for production
                 .path("/")
                 .maxAge(refreshTokenDurationMs / 1000)
-                .sameSite("None")  // Changed from Strict for cross-site requests
+                .sameSite("Lax")
                 .build();
 
         return ResponseEntity.ok()

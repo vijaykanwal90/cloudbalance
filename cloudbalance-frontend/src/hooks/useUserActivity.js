@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export const useUserActivity = (onActivity, delay = 5000) => {
+export const useUserActivity = (onActivity, delay = 600000) => {
   const timeoutRef = useRef(null);
 
   const handleDebouncedActivity = useCallback(() => {

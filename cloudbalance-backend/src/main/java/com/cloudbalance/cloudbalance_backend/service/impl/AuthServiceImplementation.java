@@ -1,11 +1,15 @@
 package com.cloudbalance.cloudbalance_backend.service.impl;
 
 import com.cloudbalance.cloudbalance_backend.dto.LoginRequestDto;
+import com.cloudbalance.cloudbalance_backend.dto.UserResponseDto;
 import com.cloudbalance.cloudbalance_backend.entity.RefreshToken;
+import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
+import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
 import com.cloudbalance.cloudbalance_backend.service.AuthService;
 import com.cloudbalance.cloudbalance_backend.service.RefreshTokenService;
 import com.cloudbalance.cloudbalance_backend.utils.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +27,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImplementation implements AuthService {
     @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpirationMs;
@@ -32,16 +40,15 @@ public class AuthServiceImplementation implements AuthService {
     private int refreshTokenDurationMs;
 
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtUtils jwtUtils;
-    @Autowired
-    private RefreshTokenService refreshTokenService;
-    @Override
-    public ResponseEntity<?> authenticate(LoginRequestDto loginRequestDto) {
 
-        try {
+    private final AuthenticationManager authenticationManager;
+    private final  JwtUtils jwtUtils;
+    private final UserRepository userRepository;
+
+    private final RefreshTokenService refreshTokenService;
+    @Override
+    @Transactional
+    public ResponseEntity<?> authenticate(LoginRequestDto loginRequestDto) {
 
             String email = loginRequestDto.getEmail();
             String password = loginRequestDto.getPassword();
@@ -52,6 +59,8 @@ public class AuthServiceImplementation implements AuthService {
             String accesstoken = jwtUtils.generateTokenFromEmailAndRole(userDetails.getUsername(),role );
 
             User user = (User) authentication.getPrincipal();
+            user.setLastLogin(Instant.now());
+            userRepository.save(user);
             Long userId = user.getId();
             refreshTokenService.deleteByUserId(user.getId());
             RefreshToken refreshtoken = refreshTokenService.createRefreshToken(userId);
@@ -60,23 +69,19 @@ public class AuthServiceImplementation implements AuthService {
                     .httpOnly(true)
                     .path("/")
                     .maxAge(jwtExpirationMs / 1000)
-                    .sameSite("Strict")
+                    .sameSite("Lax")
                     .build();
             ResponseCookie refreshToken = ResponseCookie.from("refreshToken", refreshTokenValue)
                     .httpOnly(true)
                     .path("/")
                     .maxAge(refreshTokenDurationMs / 1000)
-                    .sameSite("Strict")
+                    .sameSite("Lax")
                     .build();
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, accessToken.toString())
                     .header(HttpHeaders.SET_COOKIE, refreshToken.toString())
-
                     .body("Login successful");
-        } catch (Exception e) {
-           log.error( " error while login " + e);
-            return ResponseEntity.status(401).build();
-        }
+
     }
 
     @Override
@@ -90,7 +95,7 @@ public class AuthServiceImplementation implements AuthService {
                 .from("accessToken", "")
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("None")
+                .sameSite("Lax")
                 .path("/")
                 .maxAge(0)
                 .build();
@@ -99,7 +104,7 @@ public class AuthServiceImplementation implements AuthService {
                 .from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("None")
+                .sameSite("Lax")
                 .path("/")
                 .maxAge(0)
                 .build();
@@ -111,13 +116,19 @@ public class AuthServiceImplementation implements AuthService {
 
     }
     @Override
-    public boolean checkIsLoggedIn(){
+    public UserResponseDto getCurrentUser(){
+        UserResponseDto user = new UserResponseDto();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        return authentication != null
-                && authentication.isAuthenticated()
-                && !(authentication instanceof AnonymousAuthenticationToken);
+        User userDetails = (User) authentication.getPrincipal();
+        user.setFirstName(userDetails.getFirstName());
+        user.setLastName(userDetails.getLastName());
+        user.setEmail(userDetails.getEmail());
+        user.setRole(userDetails.getRole().toString());
+        user.setLastLogin(userDetails.getLastLogin());
+        return user;
     }
+
+
 
 
 }

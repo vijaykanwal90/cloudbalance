@@ -27,12 +27,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(max=20, message="FirstName length should be smaller than 20 ")
+
+    @Column(length = 20, nullable = false)
     private String firstName;
+
     private String lastName;
-    @NotBlank(message="Email is required")
-    @Email(message="Email should be valid")
+
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -41,10 +42,11 @@ public class User implements UserDetails {
     private Instant lastLogin;
 
 
-    @NotNull
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     @Override

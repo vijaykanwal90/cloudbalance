@@ -2,6 +2,10 @@ package com.cloudbalance.cloudbalance_backend.dto;
 
 
 import com.cloudbalance.cloudbalance_backend.entity.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +16,19 @@ import lombok.Setter;
 @RequiredArgsConstructor
 //@NoArgsConstructor
 public class UpdateUserDto {
-    private  String firstName;
-    private  String lastName;
+
+    @Size(min = 3, max = 20, message = "First name must be between 3 and 20 characters")
+    private String firstName;
+
+    @Size(min = 3, max = 20)
+    private String lastName;
+
+    @Email(message = "Invalid email format")
     private String email;
-    private Role role;
+
+//    private Role role;
+
+      private String role;
+
+
 }

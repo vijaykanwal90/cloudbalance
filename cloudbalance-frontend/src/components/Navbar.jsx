@@ -9,11 +9,19 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { BASE_URL } from "../constants/constants";
 import { useLogout } from "../hooks/useLogout";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   // const navigate = useNavigate();
     const {isCollapased, toggleisCollapased} = useContext(SidebarContext)
     const logout = useLogout();
+    const user = useSelector((user)=>{
+
+     return user
+    }
+  );
+    console.log(user)
+
   
   return (
     <div className="w-full fixed top-0 left-0 flex justify-between py-4 px-6 h-16 bg-white shadow-gray-300 shadow-lg  z-30">

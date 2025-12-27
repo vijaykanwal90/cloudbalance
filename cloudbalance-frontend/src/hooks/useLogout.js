@@ -15,7 +15,7 @@ export const useLogout = () => {
         { withCredentials: true }
       );
   
-      if (res.status === 204) {
+      if (res.status === 200) {
         navigate("/login");
       }
     } catch (error) {
