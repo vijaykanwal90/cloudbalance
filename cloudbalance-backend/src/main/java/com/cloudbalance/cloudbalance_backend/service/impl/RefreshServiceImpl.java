@@ -67,7 +67,8 @@ public class RefreshServiceImpl implements RefreshTokenService {
         String newAccessToken = jwtUtils.generateTokenFromEmailAndRole(user.getEmail(), role);
 
         // Delete old refresh token and create new one
-        deleteByUserId(user.getId());
+//        deleteByUserId(user.getId());
+        deleteRefreshToken(refreshToken);
         String newrefreshToken = createRefreshToken(user.getId()).getToken();
 
         // Create response cookies
@@ -119,15 +120,22 @@ public class RefreshServiceImpl implements RefreshTokenService {
 
     }
 
-    @Override
-    public Optional<RefreshToken> findByToken(String refreshToken) {
-        return null;
-    }
+//    @Override
+//    public Optional<RefreshToken> findByToken(String refreshToken) {
+//        return null;
+//    }
 
     public void updateTokenExpiry(RefreshToken refreshToken) {
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshTokenRepository.save(refreshToken);
 
+    }
+    public void deleteRefreshToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+
+        refreshTokenRepository.delete(refreshToken);
     }
 
     @Override

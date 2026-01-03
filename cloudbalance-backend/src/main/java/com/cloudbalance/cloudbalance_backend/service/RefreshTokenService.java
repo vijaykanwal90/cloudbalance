@@ -10,8 +10,9 @@ public interface RefreshTokenService {
 
     public ResponseEntity<?> regenerateToken(String token);
     public Boolean verifyExpiration(RefreshToken token);
-    public Optional<RefreshToken> findByToken(String refreshToken);
+//    public Optional<RefreshToken> findByToken(String refreshToken);
     public RefreshToken createRefreshToken(Long id);
     public String getRefreshToken(Long id);
+    public void deleteRefreshToken(String refreshToken);
     public void deleteByUserId(Long id);
 }

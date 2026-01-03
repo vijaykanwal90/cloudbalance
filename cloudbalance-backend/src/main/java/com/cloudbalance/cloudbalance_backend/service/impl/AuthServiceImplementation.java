@@ -62,7 +62,8 @@ public class AuthServiceImplementation implements AuthService {
             user.setLastLogin(Instant.now());
             userRepository.save(user);
             Long userId = user.getId();
-            refreshTokenService.deleteByUserId(user.getId());
+//              refreshTokenService.deleteRefreshToken()
+//            refreshTokenService.deleteByUserId(user.getId());
             RefreshToken refreshtoken = refreshTokenService.createRefreshToken(userId);
             String  refreshTokenValue = refreshtoken.getToken();
             ResponseCookie accessToken = ResponseCookie.from("accessToken", accesstoken)
@@ -86,10 +87,11 @@ public class AuthServiceImplementation implements AuthService {
 
     @Override
   @Transactional
-    public ResponseEntity<?> logout(){
+    public ResponseEntity<?> logout(String refreshToken){
         User user= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = user.getId();
-        refreshTokenService.deleteByUserId(userId);
+//        String refreshToken= refreshTokenService.getRefreshToken(userId);
+        refreshTokenService.deleteRefreshToken(refreshToken);
 
         ResponseCookie accessTokenCookie = ResponseCookie
                 .from("accessToken", "")

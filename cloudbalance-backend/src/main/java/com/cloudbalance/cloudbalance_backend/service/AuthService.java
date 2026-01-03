@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AuthService {
     public ResponseEntity<?> authenticate(LoginRequestDto loginRequestDto);
-    public ResponseEntity<?> logout ();
+    public ResponseEntity<?> logout (String refreshToken);
     public UserResponseDto getCurrentUser();
 }
