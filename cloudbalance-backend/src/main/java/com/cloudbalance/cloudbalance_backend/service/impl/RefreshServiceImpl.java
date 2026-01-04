@@ -17,16 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.Long;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -119,11 +115,6 @@ public class RefreshServiceImpl implements RefreshTokenService {
         return true;
 
     }
-
-//    @Override
-//    public Optional<RefreshToken> findByToken(String refreshToken) {
-//        return null;
-//    }
 
     public void updateTokenExpiry(RefreshToken refreshToken) {
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));

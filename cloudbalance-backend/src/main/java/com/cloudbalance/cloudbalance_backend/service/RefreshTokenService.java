@@ -4,13 +4,12 @@ import com.cloudbalance.cloudbalance_backend.entity.RefreshToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 @Service
 public interface RefreshTokenService {
 
     public ResponseEntity<?> regenerateToken(String token);
     public Boolean verifyExpiration(RefreshToken token);
-//    public Optional<RefreshToken> findByToken(String refreshToken);
+//  public Optional<RefreshToken> findByToken(String refreshToken);
     public RefreshToken createRefreshToken(Long id);
     public String getRefreshToken(Long id);
     public void deleteRefreshToken(String refreshToken);

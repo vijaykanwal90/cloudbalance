@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateUserDto {
     @NotBlank
-    @Size(min=3, max = 20, message = "First name should be at least  3 and less than equal 20")
+    @Size(min=3, max = 20, message = "First name should be at least  3 and less than equal to 20")
     private  String firstName;
 
     private  String lastName;
@@ -29,7 +29,6 @@ public class CreateUserDto {
     @Size(min=6)
     private String password;
 
-//    private Role role;
     private String role;
 
 }

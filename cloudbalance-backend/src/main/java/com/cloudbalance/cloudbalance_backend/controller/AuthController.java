@@ -37,7 +37,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid  @RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequestDto) {
 
         return authService.authenticate(loginRequestDto);
 
@@ -45,40 +45,28 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
-        String refreshToken = jwtUtils.parseJwt(request,"refreshToken");
+        String refreshToken = jwtUtils.parseJwt(request, "refreshToken");
         return authService.logout(refreshToken);
-
-
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
-        UserResponseDto user  = authService.getCurrentUser();
+        UserResponseDto user = authService.getCurrentUser();
 
-        if (user==null) {
+        if (user == null) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("loggedIn", false));
         }
-
         return ResponseEntity.status(200).body(user);
     }
 
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> regenerateToken(HttpServletRequest request){
-//        String refreshToken = Arrays.stream(request.getCookies())
-//                .filter(c -> "refreshToken".equals(c.getName()))
-//                .map(Cookie::getValue)
-//                .findFirst()
-//                .orElseThrow(() -> new RuntimeException("Refresh token missing"));
-        String refreshToken = jwtUtils.parseJwt(request,"refreshToken");
-
+    public ResponseEntity<?> regenerateToken(HttpServletRequest request) {
+        String refreshToken = jwtUtils.parseJwt(request, "refreshToken");
         return refreshTokenService.regenerateToken(refreshToken);
-
     }
-
-
 
 
 }

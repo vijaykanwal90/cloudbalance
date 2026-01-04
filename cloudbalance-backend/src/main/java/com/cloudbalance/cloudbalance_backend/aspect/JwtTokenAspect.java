@@ -11,14 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenAspect {
 
-//    @Pointcut("execution(* com.cloudbalance.cloudbalance_backend.controller.*.*(..))")
-//    public void updateTokenExpiry(){};
-////    @Pointcut("execution(* com.example.librarymanagement.services.*.*(..))")
-//
-//    @After("updateTokenExpiry()")
-//    public void resetTokenExpiry(){
-//
-//    }
+
 
 
 }

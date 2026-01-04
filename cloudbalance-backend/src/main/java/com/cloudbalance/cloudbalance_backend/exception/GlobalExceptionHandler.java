@@ -54,6 +54,27 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(401).body(response);
     }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                "Something wrong in your request "
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
 
 
 }
+
+//
+//Why we need both
+//
+//HTTP status code (in ResponseEntity) → Tells the browser or HTTP client what the result of the request is (200, 400, 500, etc.)
+//
+//Status in JSON body → Makes it easier for your frontend/app to parse and show custom messages.
+//
+//  In short: one is transport-level, one is application-level.

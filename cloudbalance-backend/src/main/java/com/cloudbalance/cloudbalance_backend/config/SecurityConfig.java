@@ -4,7 +4,6 @@ import com.cloudbalance.cloudbalance_backend.filter.AuthTokenFilter;
 import com.cloudbalance.cloudbalance_backend.utils.AuthEntryPointJwt;
 import com.cloudbalance.cloudbalance_backend.utils.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -36,10 +35,9 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers("/api/auth/*").permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/user/*").hasAuthority("ROLE_ADMIN")
-//                        .requestMatchers("/api/user/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement( session ->
                         session.sessionCreationPolicy(
