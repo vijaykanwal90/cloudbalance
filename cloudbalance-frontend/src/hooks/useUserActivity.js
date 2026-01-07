@@ -13,7 +13,6 @@ export const useUserActivity = (onActivity, delay = 600000) => {
 
   useEffect(() => {
     const handleActivity = () => {
-      console.log("event happened");
       handleDebouncedActivity();
     };
 

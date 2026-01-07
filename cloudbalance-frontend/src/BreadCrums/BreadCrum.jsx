@@ -4,16 +4,18 @@ import { breadCrumEnumLink } from '../Enums/BreadCrumLinks';
 
  const  Breadcrumb = () =>{
   const location = useLocation();
-  const pathnames = location.pathname.split('/').filter((x) => x).slice(1);
-  // const pathnames = location.pathname.split('/').filter((x) => x);
-
+  // const pathnames = location.pathname.split('/').filter((x) => x).slice(1);
+  const pathnames = location.pathname
+    .split("/")
+    .filter(Boolean)
+    .slice(1)
+    .filter((path) => !isDynamicParam(path));
 
   return (
     <nav className='border-b-2 border-gray-400'>
       
       {pathnames.map((path, index) => {
         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
-        console.log(to)
         return (
 
           <span key={to}>
@@ -28,6 +30,9 @@ import { breadCrumEnumLink } from '../Enums/BreadCrumLinks';
     </nav>
   );
 }
+const isDynamicParam = (segment) => {
+  return !isNaN(segment);
+};
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);

@@ -6,7 +6,7 @@ import Onboarding from "../components/dashboard-components/Onboarding";
 import CostExplorer from "../components/dashboard-components/CostExplorer";
 import AWSServices from "../components/dashboard-components/AWSServices";
 import UserManagement from "../components/dashboard-components/UserManagement";
-import AddUser from "../components/UserManagement/AddUser"
+import UserFormLayout from "../components/UserManagement/UserFormLayout";
 import UserTable from "../components/UserManagement/UserTable";
 // const routesList = [
 //   {
@@ -63,7 +63,9 @@ const ProtectedRoutes = () => {
 
           <Route path="user-table" element={<UserTable/>}/>
 
-          <Route path="add-user" element={<AddUser/>}/>
+          <Route path="adduser" element={<UserFormLayout/>}/>
+          <Route path="edituser/:id" element={<UserFormLayout/>}/>
+
 
         </Route>
         <Route>

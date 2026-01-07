@@ -5,12 +5,12 @@ const FilterSelection = ({
   filterSelectionBox,
   setFilterSectionBox,
   openedFilter,
-  setOpenedFilter
+  setOpenedFilter,
 }) => {
-  const onClose = ()=>{
-        setOpenedFilter(null)
-      setFilterSectionBox(!filterSelectionBox)
-  }
+  const onClose = () => {
+    setOpenedFilter(null);
+    setFilterSectionBox(!filterSelectionBox);
+  };
   const subFilters = [
     "Billing Period",
     "Tags",
@@ -43,8 +43,16 @@ const FilterSelection = ({
         })}
       </ul>
       <div className="flex justify-end gap-2 mt-2 font-bold">
-        <button className="px-2 py-1 border rounded-md  text-blue-800 cursor-pointer" onClick={onClose}>Close</button>
-        <button  className="px-2 py-1 border rounded-md text-white bg-blue-800 cursor-pointer"> Apply</button>
+        <button
+          className="px-2 py-1 border rounded-md  text-blue-800 cursor-pointer"
+          onClick={onClose}
+        >
+          Close
+        </button>
+        <button className="px-2 py-1 border rounded-md text-white bg-blue-800 cursor-pointer">
+          {" "}
+          Apply
+        </button>
       </div>
     </div>
   );

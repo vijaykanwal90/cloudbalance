@@ -9,26 +9,12 @@ import {
 } from "../context/SidebarContext";
 import Breadcrumb from "../BreadCrums/BreadCrum";
 import { BASE_URL } from "../constants/constants";
-import axios from "axios";
-import { addUser,removeUser } from "../redux/actions/user-action";
+import { fetchCurrentUser,removeUser } from "../redux/actions/auth-action";
 import { useDispatch,useSelector } from "react-redux";
 const Dashboard = () => {
-        const dispatch = useDispatch()
-  const fetchUser = async()=>{
-       const res = await axios.get(`${BASE_URL}/auth/me`,{
-        withCredentials: true
-       })
-       console.log(res.data)
-       if(res.status===200){
-          dispatch(()=>{
-            addUser(res.data)
-          })
-       }
-  }
+ 
 
-  useEffect(()=>{
-        fetchUser()
-  },[])
+ 
   return (
     <>
       <SidebarContextProvider>

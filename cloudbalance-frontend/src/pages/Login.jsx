@@ -3,18 +3,19 @@ import LoginFooter from "../components/footers/LoginFooter";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
-import { BASE_URL } from "../constants/constants";
-import axios from "axios";
+import {loginApi} from '../APIs/auth.api'
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../utils/formValidation";
+import { useDispatch } from "react-redux";
+import {getCurrentUserApi} from "../APIs/auth.api"
 const Login = () => {
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "admin@gmail.com",
+    password: "admin123",
   });
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -54,19 +55,11 @@ const Login = () => {
       return;
     }
     try {
-      const res = await axios.post(
-        `${BASE_URL}/auth/login`,
-        {
-          email: form.email,
-          password: form.password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res);
+       const res = await loginApi(form)
+      console.log( " on get/auth/me " , res);
      if(res.status==200){
-      setIsLoggedIn(true);
+      console.log("fetching current user")
+      dispatch(getCurrentUserApi());
       navigate("/dashboard");
      }
       
@@ -75,7 +68,7 @@ const Login = () => {
       toast.error(error.message);
     }
   };
-  useEffect(() => {}, [isLoggedIn, navigate]);
+  // useEffect(() => {}, [ navigate]);
   return (
     <>
       <form className="w-80 mt-48 mx-auto " onSubmit={handleSubmit}>
