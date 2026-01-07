@@ -12,6 +12,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponseDto {
+    private Long id;
     private String firstName;
     private String lastName;
     private Instant lastLogin;

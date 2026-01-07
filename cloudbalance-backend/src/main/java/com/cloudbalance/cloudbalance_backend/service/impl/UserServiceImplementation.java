@@ -3,6 +3,7 @@ package com.cloudbalance.cloudbalance_backend.service.impl;
 import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
 import com.cloudbalance.cloudbalance_backend.dto.UpdateUserDto;
 import com.cloudbalance.cloudbalance_backend.dto.UpdateUserResponseDto;
+import com.cloudbalance.cloudbalance_backend.dto.UserResponseDto;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
@@ -12,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -76,7 +80,7 @@ public class UserServiceImplementation implements UserService {
         }
 
         if (request.getRole() != null) {
-            user.setRole(Role.valueOf(request.getRole()));
+            user.setRole(Role.valueOf(request.getRole().toUpperCase()));
         }
         User savedUser = userRepository.save(user);
         UpdateUserResponseDto response = new UpdateUserResponseDto();
@@ -87,7 +91,26 @@ public class UserServiceImplementation implements UserService {
         response.setRole(savedUser.getRole());
         return response;
     }
+    public List<UserResponseDto> getAllUsers(){
 
+
+            return userRepository.findAll()
+                    .stream()
+                    .map(user -> {
+                        UserResponseDto dto = new UserResponseDto();
+                        dto.setId(user.getId());
+                        dto.setFirstName(user.getFirstName());
+                        dto.setLastName(user.getLastName());
+                        dto.setRole(user.getRole().toString());
+                        dto.setLastLogin(user.getLastLogin());
+                        dto.setEmail(user.getEmail());
+                        return dto;
+                    })
+                    .toList();
+
+
+
+    }
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder
                 .getContext()

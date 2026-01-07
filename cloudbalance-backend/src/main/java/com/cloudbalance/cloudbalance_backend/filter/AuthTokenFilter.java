@@ -50,8 +50,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("JWT authentication failed" + e.getMessage());
             SecurityContextHolder.clearContext();
-        }
 
+        }
+        log.info("there is no need to validate jwt");
         filterChain.doFilter(request, response);
     }
 

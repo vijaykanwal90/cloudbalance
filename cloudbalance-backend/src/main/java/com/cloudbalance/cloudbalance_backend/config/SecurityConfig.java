@@ -35,9 +35,8 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers("/api/auth/me").authenticated()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/user/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement( session ->
                         session.sessionCreationPolicy(

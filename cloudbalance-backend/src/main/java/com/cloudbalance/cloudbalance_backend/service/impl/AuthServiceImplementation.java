@@ -116,6 +116,7 @@ public class AuthServiceImplementation implements AuthService {
         UserResponseDto user = new UserResponseDto();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
+        user.setId(userDetails.getId());
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
         user.setEmail(userDetails.getEmail());

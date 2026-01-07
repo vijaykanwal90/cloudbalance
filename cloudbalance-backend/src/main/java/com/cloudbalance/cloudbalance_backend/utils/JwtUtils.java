@@ -122,9 +122,13 @@ public class JwtUtils {
             System.out.println("Validate");
             Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(authToken);
             return true;
-        } catch (MalformedJwtException e) {
+        }
+
+        catch (MalformedJwtException e) {
+
             log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
+//            throw new RuntimeException("jwt is malformed");
             log.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
