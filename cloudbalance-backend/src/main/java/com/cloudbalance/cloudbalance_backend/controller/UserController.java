@@ -7,6 +7,7 @@ import com.cloudbalance.cloudbalance_backend.dto.UserResponseDto;
 import com.cloudbalance.cloudbalance_backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,10 @@ public class UserController {
 
         return ResponseEntity.status(200).body(users);
     }
+    /*@GetMapping('/account')
+    public ResponseEntity<?> getUserAccounts(){
 
+    }*/
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser( @Valid @RequestBody CreateUserDto createUserDto){

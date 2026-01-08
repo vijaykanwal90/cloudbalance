@@ -4,6 +4,7 @@ import com.cloudbalance.cloudbalance_backend.entity.RefreshToken;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.exception.RefreshTokenExpiryException;
+import com.cloudbalance.cloudbalance_backend.exception.ResourceNotFoundException;
 import com.cloudbalance.cloudbalance_backend.repository.RefreshTokenRepository;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
 import com.cloudbalance.cloudbalance_backend.service.RefreshTokenService;
@@ -109,7 +110,7 @@ public class RefreshServiceImpl implements RefreshTokenService {
     public Boolean verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new RuntimeException("Refresh token was expired. Please make a new signin request");
+            throw new ResourceNotFoundException("Refresh token was expired. Please make a new signin request");
         }
 
         return true;
@@ -124,7 +125,7 @@ public class RefreshServiceImpl implements RefreshTokenService {
     public void deleteRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository
                 .findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Refresh token not found"));
 
         refreshTokenRepository.delete(refreshToken);
     }
@@ -138,7 +139,7 @@ public class RefreshServiceImpl implements RefreshTokenService {
     @Transactional
     public void deleteByUserId(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         refreshTokenRepository.deleteByUser(user);
         refreshTokenRepository.flush();

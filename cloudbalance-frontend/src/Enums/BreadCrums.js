@@ -5,5 +5,7 @@ export const breadCrumEnum = Object.freeze({
     "cost-explorer":"Cost Explorer",
     "aws-services":"AWS Services",
     "adduser":"Add User",
-    "edituser":"Edit User"
+    "edituser":"Edit User",
+    "assign-account":"Assign Account",
+    'link-account':"Link Account"
 })

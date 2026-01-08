@@ -36,14 +36,33 @@ public class GlobalExceptionHandler {
 
 
         ApiErrorResponse response = new ApiErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 "Authentication Failed",
                 "Username or password is not correct"
         );
 
-        return ResponseEntity.status(401).body(response);
+        return ResponseEntity.status(400).body(response);
     }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex){
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                "Request Data not found"
+        );
 
+        return ResponseEntity.status(404).body(response);
+    }
+    @ExceptionHandler(ResourceAlreadyExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExist(ResourceAlreadyExistException ex){
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                "Resource already exist"
+        );
+
+        return ResponseEntity.status(400).body(response);
+    }
     @ExceptionHandler(RefreshTokenExpiryException.class)
     public ResponseEntity<ApiErrorResponse> handleRefreshTokenExpiryException(RefreshTokenExpiryException ex){
         ApiErrorResponse response = new ApiErrorResponse(

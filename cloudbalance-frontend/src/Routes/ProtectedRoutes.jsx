@@ -2,12 +2,14 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Users from "../components/dashboard-components/UserManagement";
 import Dashboard from "../pages/Dashboard";
-import Onboarding from "../components/dashboard-components/Onboarding";
+import Onboarding from "../components/Onboarding-components/Onboarding";
+import AccountOnboarding from "../components/Onboarding-components/AccountOnboarding";
 import CostExplorer from "../components/dashboard-components/CostExplorer";
 import AWSServices from "../components/dashboard-components/AWSServices";
 import UserManagement from "../components/dashboard-components/UserManagement";
 import UserFormLayout from "../components/UserManagement/UserFormLayout";
 import UserTable from "../components/UserManagement/UserTable";
+import AccountManagement from "../components/account-components/AccountManagement";
 // const routesList = [
 //   {
 //     id: 1,
@@ -58,26 +60,25 @@ const ProtectedRoutes = () => {
             <Route key={route.id} path={route.path} element={route.element} />
           );
         })} */}
-        <Route path="user-management" element={<UserManagement/>}>
-          <Route index element={<UserTable/>}/>
+        <Route path="user-management" element={<UserManagement />}>
+          <Route index element={<UserTable />} />
 
-          <Route path="user-table" element={<UserTable/>}/>
+          <Route path="user-table" element={<UserTable />} />
 
-          <Route path="adduser" element={<UserFormLayout/>}/>
-          <Route path="edituser/:id" element={<UserFormLayout/>}/>
+          <Route path="adduser" element={<UserFormLayout />} />
+          <Route path="edituser/:id" element={<UserFormLayout />} />
+        </Route>
+        <Route path="assign-account/:id" element={<AccountManagement />} />
 
+        <Route path="assign-account" element={<AccountManagement />}></Route>
+        <Route path="onboarding" element={<Onboarding />} />
 
+        <Route path="onboarding/link-account" element={<AccountOnboarding />} />
+        <Route>
+          <Route path="cost-explorer" element={<CostExplorer />} />
         </Route>
         <Route>
-          <Route path="onboarding" element={<Onboarding/>}/>
-
-        </Route>
-        <Route>
-          <Route path="cost-explorer" element={<CostExplorer/>}/>
-
-        </Route>
-        <Route>
-          <Route path="aws-services" element={<AWSServices/>}/>
+          <Route path="aws-services" element={<AWSServices />} />
         </Route>
       </Route>
     </Routes>

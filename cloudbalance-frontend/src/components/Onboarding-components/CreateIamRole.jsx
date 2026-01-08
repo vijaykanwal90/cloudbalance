@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IamRoleImage from "../../assets/Iam-role-guide-image.png";
-import { StepCounter } from "../dashboard-components/Onboarding";
+import { StepCounter } from "./AccountOnboarding";
 const jsonData = {
   Version: "2012-10-17",
   Statement: [

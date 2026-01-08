@@ -10,11 +10,12 @@ import { breadCrumEnumLink } from '../Enums/BreadCrumLinks';
     .filter(Boolean)
     .slice(1)
     .filter((path) => !isDynamicParam(path));
-
+console.log(pathnames)
   return (
     <nav className='border-b-2 border-gray-400'>
       
       {pathnames.map((path, index) => {
+        console.log(path)
         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
         return (
 
@@ -35,6 +36,7 @@ const isDynamicParam = (segment) => {
 };
 
 function capitalize(str) {
+  console.log(str)
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 export default Breadcrumb;

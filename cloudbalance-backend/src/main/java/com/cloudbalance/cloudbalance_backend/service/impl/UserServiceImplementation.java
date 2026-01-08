@@ -6,6 +6,8 @@ import com.cloudbalance.cloudbalance_backend.dto.UpdateUserResponseDto;
 import com.cloudbalance.cloudbalance_backend.dto.UserResponseDto;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
+import com.cloudbalance.cloudbalance_backend.exception.ResourceAlreadyExistException;
+import com.cloudbalance.cloudbalance_backend.exception.ResourceNotFoundException;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
 import com.cloudbalance.cloudbalance_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class UserServiceImplementation implements UserService {
 
     public User createUser(CreateUserDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            return userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("Problem occured in create User"));
+            throw  new ResourceAlreadyExistException("User already exist with email " + request.getEmail());
         }
 
         User user = new User();
@@ -45,7 +47,7 @@ public class UserServiceImplementation implements UserService {
 
     public CreateUserDto getUser(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id: " + id
                 ));
 
@@ -61,7 +63,7 @@ public class UserServiceImplementation implements UserService {
 
     public UpdateUserResponseDto updateUser(Long id, UpdateUserDto request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id: " + id
                 ));
         Long currentUserId = getCurrentUserId();
