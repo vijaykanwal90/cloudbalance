@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { MdOutlineInfo } from "react-icons/md";
@@ -6,20 +6,30 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { SidebarContextProvider } from "../context/SidebarContext";
 import { SidebarContext } from "../context/SidebarContext";
 import CloseIcon from "@mui/icons-material/Close";
-
-import { BASE_URL } from "../constants/constants";
 import { useLogout } from "../hooks/useLogout";
 import { useSelector } from "react-redux";
-
+import { myAccountsApi } from "../APIs/account.api";
 const Navbar = () => {
   // const navigate = useNavigate();
   const { isCollapased, toggleisCollapased } = useContext(SidebarContext);
   const logout = useLogout();
+  const [userAccounts, setUserAccount] = useState([]);
   const { user, isAuthenticated, loading } = useSelector((data) => {
     console.log(data.auth);
     return data.auth;
   });
-  console.log(user);
+
+  useEffect(() => {
+    const fetchMyAccounts = async () => {
+      const res = await myAccountsApi();
+      if (res.status == 200) {
+        setUserAccount(res.data);
+      }
+    };
+    if (!userAccounts || userAccounts.length === 0) {
+      fetchMyAccounts();
+    }
+  }, [user]);
 
   return (
     <div className="w-full fixed top-0 left-0 flex justify-between py-4 px-6 h-16 bg-white shadow-gray-300 shadow-lg  z-30">
@@ -31,14 +41,24 @@ const Navbar = () => {
           {isCollapased ? <MenuIcon /> : <CloseIcon />}
           {/* <isCollapasedIcon /> */}
         </button>
-        <div className="flex flex-col">
-          <label htmlFor="account">Account</label>
-          <select name="account" id="account">
-            <option value="aws-1">aws-1</option>
+        {userAccounts.length > 0  && (
+          <div className="flex flex-col">
+            <label htmlFor="account">Account</label>
+            <select name="account" id="account">
+              {/* <option value="aws-1">aws-1</option>
             <option value="aws-2">aws-2</option>
-            <option value="aws-3">aws-3</option>
-          </select>
-        </div>
+            <option value="aws-3">aws-3</option> */}
+              {userAccounts &&
+                userAccounts.map((account) => {
+                  return (
+                    <option key={account.id} value={account.accountId}>
+                      {account.accountName}
+                    </option>
+                  );
+                })}
+            </select>
+          </div>
+        )}
       </div>
       <div className="flex  justify-between  gap-12 text-sky-700">
         <div className="flex gap-4">

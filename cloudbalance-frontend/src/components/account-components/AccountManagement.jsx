@@ -18,7 +18,10 @@ const fetchUser = async () => {
       const res = await getUserByIdApi(id);
       setSelectedUser(res.data);
     };
+    if(id){
     fetchUser()
+
+    }
   },[id])
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,7 +39,7 @@ const fetchUser = async () => {
       fetchUsers();
     }
   }, [dispatch, users]);
-  console.log(selectedUser);
+  // console.log(selectedUser);
   return (
     <div className="py-4">
       <UserSelector

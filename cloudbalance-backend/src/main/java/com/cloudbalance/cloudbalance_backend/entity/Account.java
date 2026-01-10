@@ -1,5 +1,6 @@
 package com.cloudbalance.cloudbalance_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +18,10 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String accountNumber;
+    private String accountName;
     private String accountId;
     private String accountARN;
     @ManyToMany(mappedBy = "accounts")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }

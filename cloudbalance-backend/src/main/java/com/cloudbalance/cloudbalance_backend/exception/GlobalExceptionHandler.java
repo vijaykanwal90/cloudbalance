@@ -73,18 +73,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(401).body(response);
     }
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
-        ApiErrorResponse response = new ApiErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage(),
-                "Something wrong in your request "
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(response);
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
+//        ApiErrorResponse response = new ApiErrorResponse(
+//                HttpStatus.BAD_REQUEST.value(),
+//                ex.getMessage(),
+//                "Something wrong in your request "
+//        );
+//
+//        return ResponseEntity
+//                .status(HttpStatus.BAD_REQUEST)
+//                .body(response);
+//    }
 
 
 }

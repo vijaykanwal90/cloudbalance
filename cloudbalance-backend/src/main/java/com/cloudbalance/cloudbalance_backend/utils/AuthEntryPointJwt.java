@@ -18,7 +18,7 @@ public class AuthEntryPointJwt  implements AuthenticationEntryPoint {
         response.setContentType("application/json;charset=UTF-8");
         ApiErrorResponse apiError = new ApiErrorResponse(
                 HttpServletResponse.SC_UNAUTHORIZED, // for json response
-                "Please log in to access this resource",
+                authException.getMessage(),
                 "Access Denied"
         );
 

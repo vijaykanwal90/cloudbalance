@@ -8,7 +8,7 @@ import lombok.Setter;
 public class CreateAccountDto {
 
 
-    private String accountNumber;
+    private String accountName;
     private String accountId;
     private String accountARN;
 }

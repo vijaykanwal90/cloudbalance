@@ -1,5 +1,6 @@
 package com.cloudbalance.cloudbalance_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +50,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         return List.of(new SimpleGrantedAuthority(
-                "ROLE_" + this.getRole().name()   // 👈 HERE
+                "ROLE_" + this.getRole().name()
         ));
     }
 
@@ -70,5 +71,12 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="account_id")
     )
+    @JsonIgnore
     private Set<Account> accounts = new HashSet<>();
+
+    public void addAccount(Account account){
+        this.accounts.add(account);
+        account.getUsers().add(this);
+    }
+
 }

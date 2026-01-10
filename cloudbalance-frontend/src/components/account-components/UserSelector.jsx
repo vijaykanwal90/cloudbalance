@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useMemo } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,6 +16,13 @@ const UserSelector = ({users,selectedUser, setSelectedUser}) => {
        }
 
    }
+   const customerUsers = useMemo(() => {
+    return users.filter(user =>
+     
+        user.role === "CUSTOMER"
+      )
+  
+  }, [users]);
   return (
     <div className="mb-4">
       <button
@@ -50,7 +57,7 @@ const UserSelector = ({users,selectedUser, setSelectedUser}) => {
             </div>
 
             <ul className="flex-1 overflow-y-auto px-3 py-2">
-              {users.map((user) => (
+              {customerUsers.map((user) => (
                 <li
                   key={user.id}
                   className="flex items-center gap-2 px-2 py-2 rounded hover:bg-slate-100 text-sm"

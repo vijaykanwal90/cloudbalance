@@ -36,13 +36,13 @@ const UserTable = () => {
     <div className="pl-4 mt-4 pb-4">
       <div className="flex gap-4 mb-4">
         <Link to="/dashboard/user-management/adduser">
-          <button className="px-4 py-2 bg-sky-600 rounded-md text-white">
+          <button className="px-4 py-2 bg-sky-600 rounded-md text-white cursor-pointer">
             Add User
           </button>
         </Link>
 
         <Link to="/dashboard/assign-account">
-          <button className="px-4 py-2 bg-sky-600 rounded-md text-white">
+          <button className="px-4 py-2 bg-sky-600 rounded-md text-white cursor-pointer">
             Assign Account
           </button>
         </Link>
@@ -73,13 +73,13 @@ const UserTable = () => {
                     {heading.key === "actions" ? (
                       <span className="flex gap-4 justify-center">
                         {/* Edit → not admin */}
-                        {user.role !== "ADMIN" && (
+                       
                           <Link
                             to={`/dashboard/user-management/edituser/${user.id}`}
                           >
                             <EditIcon fontSize="small" />
                           </Link>
-                        )}
+                      
                         {/* Manage Account → only customer */}
                         {user.role === "CUSTOMER" && (
                           <Link to={`/dashboard/assign-account/${user.id}`}>

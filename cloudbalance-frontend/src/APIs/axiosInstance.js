@@ -30,7 +30,6 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Import here to avoid circular dependency
         await refreshTokensApi();
         return axiosInstance(originalRequest);
       } catch (refreshError) {

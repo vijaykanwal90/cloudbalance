@@ -36,7 +36,7 @@ const Login = () => {
       toast.error("Password can't be empty");
       return false;
     }
-    if (password.length < 8) {
+    if (password.length < 6) {
       toast.error("Password should be greater than 8");
       return false;
     }

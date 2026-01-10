@@ -1,53 +1,116 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AccountList from "./AccountList";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-const accounts = [
-  { id: 1, value: "Savings Account" },
-  { id: 2, value: "Current Account" },
-  { id: 3, value: "Business Account" },
-  { id: 4, value: "Joint Account" },
-  { id: 5, value: "Salary Account" },
-  { id: 6, value: "Fixed Deposit Account" },
-  { id: 7, value: "Recurring Deposit Account" },
-  { id: 8, value: "NRI Account" },
-  { id: 9, value: "Corporate Account" },
-  { id: 10, value: "Student Account" },
-  { id: 11, value: "Premium Account" },
-  { id: 12, value: "Basic Account" },
-  { id: 13, value: "Trust Account" },
-  { id: 14, value: "Minor Account" },
-  { id: 15, value: "Investment Account" },
-  { id: 16, value: "Loan Account" },
-  { id: 17, value: "Overdraft Account" },
-  { id: 18, value: "Escrow Account" },
-  { id: 19, value: "Merchant Account" },
-  { id: 20, value: "Digital Wallet Account" },
-  { id: 21, value: "Retirement Account" },
-  { id: 22, value: "Pension Account" },
-  { id: 23, value: "Tax Account" },
-  { id: 24, value: "Insurance Account" },
-  { id: 25, value: "Credit Account" },
-  { id: 26, value: "Foreign Currency Account" },
-  { id: 27, value: "Payroll Account" },
-  { id: 28, value: "Custodial Account" },
-  { id: 29, value: "Settlement Account" },
-  { id: 30, value: "Virtual Account" },
-];
-const AssignAccount = ({selectedUser}) => {
-  return (
-    <>
-      <div className="my-4">Manage Account Ids for {selectedUser?.firstName}</div>
-      <div className="w-[80%] flex justify-center mx-auto gap-8">
-        <AccountList type={"assigned"} accounts={accounts} />
-        <div className="flex items-center flex-col my-auto gap-6">
-          <ArrowBackIcon className="bg-sky-500 rounded-xl hover:text-white hover:bg-sky-900" />
-          <ArrowForwardIcon className="bg-sky-500 rounded-xl hover:text-white hover:bg-sky-900" />
-        </div>
-        <AccountList type={"unassigned"} accounts={accounts} />
-      </div>
-    </>
+import { getAllAccountsApi, userAccountsApi } from "../../APIs/account.api";
+
+const AssignAccount = ({ selectedUser }) => {
+  const [allAccounts, setAllAccounts] = useState([]);
+  const [assignedAccounts, setAssignedAccounts] = useState([]);
+
+  const [selectedUnassigned, setSelectedUnassigned] = useState([]);
+  const [selectedAssigned, setSelectedAssigned] = useState([]);
+
+  useEffect(() => {
+    const fetchAllAccounts = async () => {
+      const res = await getAllAccountsApi();
+      if (res?.status === 200) {
+        setAllAccounts(res.data);
+      }
+    };
+    fetchAllAccounts();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedUser?.id) return;
+
+    const fetchUserAccounts = async () => {
+      const res = await userAccountsApi(selectedUser.id);
+      if (res?.status === 200) {
+        setAssignedAccounts(res.data);
+      }
+    };
+
+    fetchUserAccounts();
+  }, [selectedUser?.id]);
+
+  const assignedAccountIds = useMemo(
+    () => new Set(assignedAccounts.map((acc) => acc.id)),
+    [assignedAccounts]
   );
+
+  const unassignedAccounts = useMemo(
+    () => allAccounts.filter((acc) => !assignedAccountIds.has(acc.id)),
+    [allAccounts, assignedAccountIds]
+  );
+
+  const assignAccounts = () => {
+    setAssignedAccounts((prev) => [...prev, ...selectedUnassigned]);
+    setSelectedUnassigned([]);
+  };
+
+  const unassignAccounts = () => {
+    setAssignedAccounts((prev) =>
+      prev.filter((acc) => !selectedAssigned.some((a) => a.id === acc.id))
+    );
+    setSelectedAssigned([]);
+  };
+
+  
+  return (
+  <>
+    <h2 className="my-4 text-center text-lg font-semibold">
+      Manage Accounts for {selectedUser?.firstName}
+    </h2>
+
+    <div className="w-[85%] mx-auto">
+      <div className="flex justify-center gap-8">
+        {/* LEFT */}
+        <div className="w-[380px]">
+          <AccountList
+            title="Available Accounts"
+            accounts={unassignedAccounts}
+            selected={selectedUnassigned}
+            setSelected={setSelectedUnassigned}
+          />
+        </div>
+
+        {/* ARROWS */}
+        <div className="flex items-center flex-col justify-center gap-6">
+          <ArrowForwardIcon
+            onClick={assignAccounts}
+            className="cursor-pointer bg-sky-500 text-white rounded-xl p-1 hover:bg-sky-700 transition"
+          />
+          <ArrowBackIcon
+            onClick={unassignAccounts}
+            className="cursor-pointer bg-sky-500 text-white rounded-xl p-1 hover:bg-sky-700 transition"
+          />
+        </div>
+
+        {/* RIGHT */}
+        <div className="w-[380px] flex flex-col">
+          <AccountList
+            title="Assigned Accounts"
+            accounts={assignedAccounts}
+            selected={selectedAssigned}
+            setSelected={setSelectedAssigned}
+          />
+
+          <div className="flex justify-end mt-4">
+            <button
+              className="px-6 py-2 bg-sky-600 text-white rounded-md
+                         hover:bg-sky-700 transition text-sm font-medium"
+            >
+              Assign
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
+);
+
+
 };
 
 export default AssignAccount;

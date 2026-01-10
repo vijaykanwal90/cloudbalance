@@ -35,10 +35,7 @@ public class UserController {
 
         return ResponseEntity.status(200).body(users);
     }
-    /*@GetMapping('/account')
-    public ResponseEntity<?> getUserAccounts(){
 
-    }*/
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser( @Valid @RequestBody CreateUserDto createUserDto){
