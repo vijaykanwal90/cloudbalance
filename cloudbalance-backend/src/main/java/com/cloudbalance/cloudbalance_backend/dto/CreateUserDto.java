@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -27,5 +29,5 @@ public class CreateUserDto {
     private String password;
 
     private String role;
-
+    private List<Long> accountIds;
 }

@@ -4,6 +4,7 @@ import CreateIamRole from "./CreateIamRole";
 import CustomManagedPolicies from "./CustomManagedPolicies";
 import CostAndUsageReport from "./CostAndUsageReport";
 import { useNavigate } from "react-router-dom";
+import { onboardAccountApi } from "../../APIs/account.api";
 export const StepCounter = ({number})=>{
   return (
     <span className="text-white bg-slate-500 h-5 w-5 rounded-full px-2 py-1">
@@ -14,11 +15,24 @@ export const StepCounter = ({number})=>{
 const AccountOnboarding = () => {
   const [step, setStep] = useState(1);
   const navigate = useNavigate()
+  const [formData,setFormData] =  useState({
+    accountId:"",
+    accountName:"",
+    accountARN:""
+  })
+
+  const handleSubmit = async()=>{
+      const res = await onboardAccountApi(formData);
+      if(res.status===201){
+        console.log("successfully added account")
+      }
+
+  }
   return (
     <div className="w-full pb-12">
       <OnboardingHeader step={step} />
       <div className="w-[90%] mx-12">
-      {step == 1 && <CreateIamRole />}
+      {step == 1 && <CreateIamRole formData={formData} setFormData={setFormData} />}
       {step == 2 && <CustomManagedPolicies />}
       {step == 3 && <CostAndUsageReport />}
 
@@ -37,9 +51,9 @@ const AccountOnboarding = () => {
           }}
           >Next</button>
         ):(
-          <button className="border border-blue-900 rounded-md px-6 font-bold py-2 bg-white text-blue-900" 
+          <button className="border border-blue-900 rounded-md px-6 font-bold py-2 cursor-pointer bg-white text-blue-900" 
           onClick={()=>{
-            alert("submit data")
+            handleSubmit()
           }}
           >Submit</button>
         )

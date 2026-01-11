@@ -67,6 +67,11 @@ public class AccountServiceImplmentation implements AccountService {
     public ResponseEntity<?> assignAccounts(Long userId, AccountAssignDto accountAssignDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with userid " + userId));
         List<Long> requestedIds = accountAssignDto.getAccountIds();
+        user.getAccounts().clear();
+        if(requestedIds==null || requestedIds.size() ==0){
+            userRepository.save(user);
+            return ResponseEntity.status(200).body("done");
+        }
         List<Account> accounts = accountRepository.findAllById(requestedIds);
         Set<Long> foundIds = accounts.stream()
                 .map(Account::getId)

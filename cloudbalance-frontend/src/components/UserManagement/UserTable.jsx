@@ -41,11 +41,7 @@ const UserTable = () => {
           </button>
         </Link>
 
-        <Link to="/dashboard/assign-account">
-          <button className="px-4 py-2 bg-sky-600 rounded-md text-white cursor-pointer">
-            Assign Account
-          </button>
-        </Link>
+        
       </div>
 
       <div className="overflow-x-auto">

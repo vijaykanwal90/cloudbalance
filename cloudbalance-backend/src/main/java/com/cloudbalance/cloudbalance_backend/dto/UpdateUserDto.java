@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -26,6 +28,6 @@ public class UpdateUserDto {
 //    private Role role;
 
       private String role;
-
+    private List<Long> accountIds;
 
 }

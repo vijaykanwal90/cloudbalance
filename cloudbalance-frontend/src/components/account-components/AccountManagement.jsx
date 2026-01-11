@@ -41,13 +41,13 @@ const fetchUser = async () => {
   }, [dispatch, users]);
   // console.log(selectedUser);
   return (
-    <div className="py-4">
-      <UserSelector
+    <div className="">
+      {/* <UserSelector
         users={users}
         setSelectedUser={setSelectedUser}
         selectedUser={selectedUser}
-      />
-      <AssignAccount users={users} selectedUser={selectedUser} />
+      /> */}
+      {/* <AssignAccount users={users} selectedUser={selectedUser} /> */}
     </div>
   );
 };

@@ -27,10 +27,18 @@ const jsonData = {
     },
   ],
 };
-
-const CreateIamRole = () => {
-  const awsLink =
+const awsLink =
     "https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fus-east-1.console.aws.amazon.com%2Fiamv2%2Fhome%3Fregion%3Dus-east-1%26state%3DhashArgs%2523%252Froles%252Fcreate%253Fstep%253DselectEntities%26isauthcode%3Dtrue&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fiamv2&forceMobileApp=0&code_challenge=myxXjgemIjRXzXBMbstyWH9ZOpslWbJcN0xBiLWg6ng&code_challenge_method=SHA-256";
+const CreateIamRole = ({formData,setFormData}) => {
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+    
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
   return (
     <div className=" my-8 ">
       <h1 className="text-xl font-bold">Create an IAM Role</h1>
@@ -112,6 +120,10 @@ const CreateIamRole = () => {
                 type="text"
                 placeholder="Enter the IAM Role ARN "
                 className="input-boxes"
+                value={formData.accountARN}
+                name="accountARN"
+                onChange={handleChange}
+
               />
             </div>
             <div className="flex flex-col">
@@ -119,6 +131,10 @@ const CreateIamRole = () => {
               <input
                 type="text"
                 placeholder="Enter the Account Id"
+                value={formData.accountId}
+                name="accountId"
+                onChange={handleChange}
+
                 className="input-boxes"
               />
             </div>
@@ -127,7 +143,10 @@ const CreateIamRole = () => {
               <input
                 type="text"
                 placeholder="Enter the Account Name "
+                value={formData.accountName}
+                onChange={handleChange}
                 className="input-boxes"
+                name="accountName"
               />
             </div>
           </div>

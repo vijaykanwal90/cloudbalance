@@ -23,10 +23,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CreateUserDto> getUser(@PathVariable Long id ){
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id ){
 
-        CreateUserDto createUserDto = userService.getUser(id);
-        return ResponseEntity.ok(createUserDto);
+        UserResponseDto user = userService.getUser(id);
+        return ResponseEntity.ok(user);
     }
     @GetMapping
     public ResponseEntity<?> getAllUser(){

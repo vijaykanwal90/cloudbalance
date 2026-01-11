@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public interface UserService {
      public User createUser(CreateUserDto request);
-     public CreateUserDto getUser(Long id);
+     public UserResponseDto getUser(Long id);
      public UpdateUserResponseDto updateUser(Long id, UpdateUserDto request);
      public List<UserResponseDto> getAllUsers();
      public Long getCurrentUserId();

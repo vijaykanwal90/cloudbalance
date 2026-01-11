@@ -1,14 +1,12 @@
 package com.cloudbalance.cloudbalance_backend.service.impl;
 
-import com.cloudbalance.cloudbalance_backend.dto.CreateUserDto;
-import com.cloudbalance.cloudbalance_backend.dto.UpdateUserDto;
-import com.cloudbalance.cloudbalance_backend.dto.UpdateUserResponseDto;
-import com.cloudbalance.cloudbalance_backend.dto.UserResponseDto;
+import com.cloudbalance.cloudbalance_backend.dto.*;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.exception.ResourceAlreadyExistException;
 import com.cloudbalance.cloudbalance_backend.exception.ResourceNotFoundException;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
+import com.cloudbalance.cloudbalance_backend.service.AccountService;
 import com.cloudbalance.cloudbalance_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -27,7 +25,7 @@ public class UserServiceImplementation implements UserService {
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final AccountService accountService;
 
     public User createUser(CreateUserDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -42,17 +40,24 @@ public class UserServiceImplementation implements UserService {
         Role role = Role.valueOf(request.getRole().toUpperCase());
         user.setRole(role);
 
-        return userRepository.save(user);
+         userRepository.save(user);
+         if(user.getRole().toString().equals("CUSTOMER")){
+             AccountAssignDto accountAssignDto = new AccountAssignDto();
+             accountAssignDto.setAccountIds(request.getAccountIds());
+             accountService.assignAccounts(user.getId(), accountAssignDto);
+         }
+
+         return user;
     }
 
-    public CreateUserDto getUser(Long id) {
+    public UserResponseDto getUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id: " + id
                 ));
 
-        CreateUserDto dto = new CreateUserDto();
-
+        UserResponseDto dto = new UserResponseDto();
+        dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
@@ -70,21 +75,29 @@ public class UserServiceImplementation implements UserService {
         if (currentUserId.equals(id)) {
             throw new RuntimeException("You are not allowed to update your own profile");
         }
-        UpdateUserResponseDto updatedUser = new UpdateUserResponseDto();
-        if (!request.getFirstName().isEmpty()) {
+
+        if (request.getFirstName() != null && !request.getFirstName().isBlank()) {
             user.setFirstName(request.getFirstName());
         }
-        if (!request.getLastName().isEmpty()) {
-            user.setLastName(request.getLastName());
-        }
-        if (!request.getEmail().isEmpty()) {
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
             user.setEmail(request.getEmail());
         }
 
-        if (request.getRole() != null) {
+        if (request.getLastName() != null && !request.getLastName().isBlank()) {
+            user.setLastName(request.getLastName());
+        }
+
+        if (request.getRole() != null && !request.getRole().isBlank()) {
             user.setRole(Role.valueOf(request.getRole().toUpperCase()));
         }
+
         User savedUser = userRepository.save(user);
+        if(savedUser.getRole().toString().equals("CUSTOMER")){
+            AccountAssignDto accountAssignDto = new AccountAssignDto();
+            accountAssignDto.setAccountIds(request.getAccountIds());
+            accountService.assignAccounts(user.getId(), accountAssignDto);
+        }
         UpdateUserResponseDto response = new UpdateUserResponseDto();
         response.setId(savedUser.getId());
         response.setFirstName(savedUser.getFirstName());

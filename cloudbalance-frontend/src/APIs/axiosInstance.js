@@ -1,7 +1,8 @@
-// axiosInstance.js
 import axios from "axios";
 import { BASE_URL } from "../constants/constants";
-import { logoutApi , refreshTokensApi} from "./auth.api";
+import { logoutApi, refreshTokensApi } from "./auth.api";
+import { redirectToLogin } from "../utils/redirectToLogin";
+
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
@@ -10,22 +11,30 @@ const axiosInstance = axios.create({
   },
 });
 
-// Add interceptor here
 axiosInstance.interceptors.response.use(
-  // Success handler
-  response => response,
+  (response) => response,
 
-  // Error handler
-  async error => {
+  async (error) => {
     const originalRequest = error.config;
-    console.log("Interceptor triggered:", originalRequest);
-    
-    if (!originalRequest) return Promise.reject(error);
+     console.log(originalRequest)
+    if (!originalRequest) {
+      redirectToLogin();
+      return Promise.reject(error);
+    }
+
+    if (
+      error.response?.status === 401 &&
+      originalRequest.url?.includes("/auth/logout")
+    ) {
+      alert("loggin out")
+      redirectToLogin();
+      return Promise.reject(error);
+    }
 
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url.includes("/auth/refresh")
+      !originalRequest.url?.includes("/auth/refresh")
     ) {
       originalRequest._retry = true;
 
@@ -33,8 +42,11 @@ axiosInstance.interceptors.response.use(
         await refreshTokensApi();
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // await logoutApi();
-        // console.log("refresh token is expired as well")
+        
+          await logoutApi();
+       
+
+        redirectToLogin();
         return Promise.reject(refreshError);
       }
     }
