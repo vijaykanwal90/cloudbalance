@@ -7,17 +7,25 @@ import { SidebarContextProvider } from "../context/SidebarContext";
 import { SidebarContext } from "../context/SidebarContext";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLogout } from "../hooks/useLogout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { myAccountsApi } from "../APIs/account.api";
+import { getCurrentUserApi } from "../APIs/auth.api";
 const Navbar = () => {
   // const navigate = useNavigate();
   const { isCollapased, toggleisCollapased } = useContext(SidebarContext);
   const logout = useLogout();
+  const dispatch = useDispatch()
   const [userAccounts, setUserAccount] = useState([]);
   const { user, isAuthenticated, loading } = useSelector((data) => {
-    console.log(data.auth);
+    console.log(data.auth , "here in navbar");
     return data.auth;
   });
+  
+  useEffect(()=>{
+      if(!user){
+        dispatch(getCurrentUserApi());
+      }
+  },[user])
 
   useEffect(() => {
     const fetchMyAccounts = async () => {

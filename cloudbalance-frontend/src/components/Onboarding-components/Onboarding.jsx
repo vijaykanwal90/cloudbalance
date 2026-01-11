@@ -1,23 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { getAllAccountsApi } from "../../APIs/account.api";
-// const accounts = [
-//   { accountId: "1001", accountName: "Finance Core", accountArn: "arn:aws:iam::1001:root" },
-//   { accountId: "1002", accountName: "Billing Services", accountArn: "arn:aws:iam::1002:root" },
-//   { accountId: "1003", accountName: "Customer Analytics", accountArn: "arn:aws:iam::1003:root" },
-//   { accountId: "1004", accountName: "Dev Sandbox", accountArn: "arn:aws:iam::1004:root" },
-//   { accountId: "1005", accountName: "QA Environment", accountArn: "arn:aws:iam::1005:root" },
-//   { accountId: "1006", accountName: "Production Core", accountArn: "arn:aws:iam::1006:root" },
-//   { accountId: "1007", accountName: "Logging & Monitoring", accountArn: "arn:aws:iam::1007:root" },
-//   { accountId: "1008", accountName: "Security Services", accountArn: "arn:aws:iam::1008:root" },
-//   { accountId: "1009", accountName: "Data Warehouse", accountArn: "arn:aws:iam::1009:root" },
-//   { accountId: "1010", accountName: "AI & ML Platform", accountArn: "arn:aws:iam::1010:root" },
-//   { accountId: "1011", accountName: "Internal Tools", accountArn: "arn:aws:iam::1011:root" },
-//   { accountId: "1012", accountName: "Marketing Apps", accountArn: "arn:aws:iam::1012:root" },
-//   { accountId: "1013", accountName: "Partner Integrations", accountArn: "arn:aws:iam::1013:root" },
-//   { accountId: "1014", accountName: "Disaster Recovery", accountArn: "arn:aws:iam::1014:root" },
-//   { accountId: "1015", accountName: "Experimental Labs", accountArn: "arn:aws:iam::1015:root" },
-// ];
+
 
 const Onboarding = () => {
   const [accounts, setAccounts] = useState([])
