@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -15,6 +15,7 @@ const SideFilter = ({ sideFilterOpen, filterList }) => {
     setOpenedFilter(filter);
     setFilterSectionBox(!filterSelectionBox);
   };
+  
   return (
     <div className="min-h-0">
       <div className={`flex justify-between font-bold items-center pt-2 `}>
@@ -45,7 +46,7 @@ const SideFilter = ({ sideFilterOpen, filterList }) => {
                       className="cursor-pointer font-bold"
                       onClick={() => openFilterSelection(filter)}
                     >
-                      {filter}
+                      {filter.label}
                     </span>
                   </span>
                   <span className="text-gray-500">include Only</span>

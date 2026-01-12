@@ -3,7 +3,7 @@ import FusionCharts from "fusioncharts";
 import Charts from "fusioncharts/fusioncharts.charts";
 import ReactFusioncharts from "react-fusioncharts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
-import { costData } from "./dummydata";
+
 import { formatCostData } from "../../utils/formateData";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -12,7 +12,8 @@ Charts(FusionCharts);
 FusionTheme(FusionCharts);
 
 const graphTypes = ["bar-graph", "line-chart", "stacked-chart"];
-const CostGraphs = () => {
+const CostGraphs = ({costData}) => {
+  // console.log(costData)
   const formattedData = formatCostData(costData);
   const [graphType, setGraphType] = useState("bar-graph");
 

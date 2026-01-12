@@ -1,22 +1,39 @@
 export const formatCostData = (rawData) => {
-  // Extract months (keys except Usage Type + Total)
-  const months = Object.keys(rawData[0]).filter(
-    (key) => key !== "Usage Type" && key !== "Total"
-  );
+ 
+    const months = rawData.data.map(item => item.month);
 
-  // Create category labels
-  const categories = [
-    {
-      category: months.map((m) => ({ label: m }))
-    }
+// console.log(months);
+   const filters = [
+    ...new Set(
+      rawData.data.flatMap(item => Object.keys(item.filters))
+    )
   ];
+ 
+  const dataset = filters.map(filter => ({
+  seriesname: filter,
+  data: months.map(month => {
+    const monthObj = rawData.data.find(d => d.month === month);
+    return {
+      value: monthObj?.filters?.[filter] ?? 0
+    };
+  })
+}));
+console.log(dataset)
 
-  // Create dataset
-  const dataset = rawData.map((item) => ({
-    seriesname: item["Usage Type"],
-    data: months.map((m) => ({ value: item[m] }))
-  }));
+  
+const categories = [
+  {
+    category: months.map(month => {
+      
 
+      return {
+        label: month
+      };
+    })
+  }
+];
+
+console.log(categories);
   return {
     chart: {
     

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getKeysOfGroupApi } from "../../APIs/cost.api";
+
 const FilterSelection = ({
   filter,
   filterSelectionBox,
@@ -6,28 +8,38 @@ const FilterSelection = ({
   openedFilter,
   setOpenedFilter,
 }) => {
+
+  const [subFilters, setSubFilters] = useState([]);
+
   const onClose = () => {
     setOpenedFilter(null);
     setFilterSectionBox(!filterSelectionBox);
   };
-  const subFilters = [
-    "Billing Period",
-    "Tags",
-    "Cost Allocation Tags",
-    "Discount Type",
-    "Savings Plans",
-    "Reserved Instances",
-    "Operating System",
-    "Environment (Prod/Dev/Test)",
-    "Cloud Provider",
-    "Data Transfer Type",
-    "Storage Class",
-    "Pricing Model",
-  ];
+
+  useEffect(() => {
+    if (!filter?.key) return;
+
+    const fetchSubFilters = async () => {
+      try {
+        const res = await getKeysOfGroupApi(filter.key);
+        console.log(res)
+        if (res.status === 200) {
+          setSubFilters(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch sub filters", error);
+        setSubFilters([]);
+      }
+    };
+
+    fetchSubFilters();
+
+  }, [filter]); // ✅ dependency added
 
   return (
     <div className="z-50 bg-white min-h-0">
       <span>No filters currently added.</span>
+
       <div>
         <input
           type="text"
@@ -35,21 +47,24 @@ const FilterSelection = ({
           placeholder="Search"
         />
       </div>
+
       <span>Showing {subFilters.length} result</span>
+
       <ul className="h-[200px] overflow-y-scroll border-b mx-0">
-        {subFilters.map((item) => {
-          return <li>{item}</li>;
-        })}
+        {subFilters.map((item) => (
+          <li key={item}>{item}</li> // ✅ better key
+        ))}
       </ul>
+
       <div className="flex justify-end gap-2 mt-2 font-bold">
         <button
-          className="px-2 py-1 border rounded-md  text-blue-800 cursor-pointer"
+          className="px-2 py-1 border rounded-md text-blue-800 cursor-pointer"
           onClick={onClose}
         >
           Close
         </button>
+
         <button className="px-2 py-1 border rounded-md text-white bg-blue-800 cursor-pointer">
-          {" "}
           Apply
         </button>
       </div>

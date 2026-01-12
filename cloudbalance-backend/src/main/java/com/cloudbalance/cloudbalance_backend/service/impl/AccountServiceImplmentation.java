@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -64,6 +65,7 @@ public class AccountServiceImplmentation implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<?> assignAccounts(Long userId, AccountAssignDto accountAssignDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with userid " + userId));
         List<Long> requestedIds = accountAssignDto.getAccountIds();
@@ -92,6 +94,7 @@ public class AccountServiceImplmentation implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Account> userAccounts(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with userid " + userId));
         List<Account> userAccounts =  user.getAccounts().stream().toList();
@@ -99,6 +102,7 @@ public class AccountServiceImplmentation implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Account> myAccounts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
