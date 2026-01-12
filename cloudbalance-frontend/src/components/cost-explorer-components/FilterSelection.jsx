@@ -1,20 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { getKeysOfGroupApi } from "../../APIs/cost.api";
-
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const FilterSelection = ({
   filter,
   filterSelectionBox,
   setFilterSectionBox,
   openedFilter,
   setOpenedFilter,
+  query,
+  setQuery
 }) => {
-
   const [subFilters, setSubFilters] = useState([]);
-
+  const [selectedSubFilters, setSelectedSubFilters] = useState([]);
   const onClose = () => {
     setOpenedFilter(null);
-    setFilterSectionBox(!filterSelectionBox);
+    setFilterSectionBox(false);
   };
+
+const handleApply = () => {
+  setQuery((prev) => {
+    const newQuery = {
+      group: filter.key,
+      startDate: prev.startDate,
+      endDate: prev.endDate,
+      [filter.key]: selectedSubFilters,
+    };
+
+    return newQuery;
+  });
+setOpenedFilter(null);
+    setFilterSectionBox(false);
+};
+
+    
 
   useEffect(() => {
     if (!filter?.key) return;
@@ -22,7 +41,7 @@ const FilterSelection = ({
     const fetchSubFilters = async () => {
       try {
         const res = await getKeysOfGroupApi(filter.key);
-        console.log(res)
+
         if (res.status === 200) {
           setSubFilters(res.data);
         }
@@ -33,9 +52,17 @@ const FilterSelection = ({
     };
 
     fetchSubFilters();
-
-  }, [filter]); // ✅ dependency added
-
+  }, [filter]);
+  const selectSubFilters = (item) => {
+    setSelectedSubFilters((prev) => {
+      if (prev.includes(item)) {
+        return prev.filter((i) => i !== item);
+      } else {
+        return [...prev, item];
+      }
+    });
+  };
+  
   return (
     <div className="z-50 bg-white min-h-0">
       <span>No filters currently added.</span>
@@ -52,7 +79,22 @@ const FilterSelection = ({
 
       <ul className="h-[200px] overflow-y-scroll border-b mx-0">
         {subFilters.map((item) => (
-          <li key={item}>{item}</li> // ✅ better key
+          <li
+            key={item}
+            onClick={() => {
+              selectSubFilters(item);
+            }}
+            className="cursor-pointer"
+          >
+            <span>
+              {selectedSubFilters.includes(item) ? (
+                <CheckBoxIcon className="text-blue-600" fontSize="small" />
+              ) : (
+                <CheckBoxOutlineBlankIcon fontSize="small" />
+              )}
+            </span>
+            <span>{item}</span>
+          </li>
         ))}
       </ul>
 
@@ -64,7 +106,10 @@ const FilterSelection = ({
           Close
         </button>
 
-        <button className="px-2 py-1 border rounded-md text-white bg-blue-800 cursor-pointer">
+        <button
+          className="px-2 py-1 border rounded-md text-white bg-blue-800 cursor-pointer"
+          onClick={handleApply}
+        >
           Apply
         </button>
       </div>

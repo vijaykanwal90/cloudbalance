@@ -37,6 +37,7 @@ public class SecurityConfig {
                 authorizeRequests
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/refresh").permitAll()
+                        .requestMatchers("/error").permitAll()
 
 //                        .requestMatchers("/api/auth/**").authenticated()
                         .anyRequest().authenticated())

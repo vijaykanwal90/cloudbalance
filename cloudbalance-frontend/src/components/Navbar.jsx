@@ -17,7 +17,6 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const [userAccounts, setUserAccount] = useState([]);
   const { user, isAuthenticated, loading } = useSelector((data) => {
-    console.log(data.auth , "here in navbar");
     return data.auth;
   });
   

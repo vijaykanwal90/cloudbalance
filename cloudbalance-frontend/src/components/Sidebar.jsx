@@ -40,7 +40,6 @@ const sidebarList = [
 const Sidebar = () => {
   const { isCollapased } = useContext(SidebarContext);
   const { user, isAuthenticated, loading } = useSelector((data) => {
-    console.log(data.auth, "here in navbar");
     return data.auth;
   });
 

@@ -56,9 +56,7 @@ const Login = () => {
     }
     try {
        const res = await loginApi(form)
-      console.log( " on get/auth/me " , res);
      if(res.status==200){
-      console.log("fetching current user")
       dispatch(getCurrentUserApi());
       navigate("/dashboard");
      }

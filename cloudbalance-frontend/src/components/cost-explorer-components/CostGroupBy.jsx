@@ -1,25 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, MenuItem } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TuneIcon from "@mui/icons-material/Tune";
 
-const CostGroupBy = ({ sideFilterOpen, setSideFilterOpen, filterList }) => {
+const CostGroupBy = ({
+  query,
+  setQuery,
+  sideFilterOpen,
+  setSideFilterOpen,
+  filterList,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // Default groupBy = first filter
-  const [groupBy, setGroupBy] = useState(filterList[0]);
-  const mainList = filterList.slice(0,6)
-  const moreList = filterList.slice(6)
+ const groupBy =
+  filterList.find((f) => f.key === query.group) || filterList[0];
+
+  const mainList = filterList.slice(0, 6);
+  const moreList = filterList.slice(6);
   const open = Boolean(anchorEl);
 
   const openDropDown = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  
+  const formatKeyToLabel = (key) => {
+    if (!key) return "";
 
-  const selectGroupBy = (option) => {
-    setGroupBy(option); 
-    setAnchorEl(null);
+    const withSpaces = key.replace(/_/g, " ");
+
+    const label = withSpaces
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
+    return label;
   };
+  const selectGroupBy = (option) => {
+  setQuery((prev) => ({
+    ...prev,
+    group: option.key,
+  }));
+  setAnchorEl(null);
+};
+
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -29,6 +52,7 @@ const CostGroupBy = ({ sideFilterOpen, setSideFilterOpen, filterList }) => {
     setSideFilterOpen(!sideFilterOpen);
   };
   
+  console.log("rendered ...")
   return (
     <div className="border-b bg-white px-4 py-3">
       <div className="flex justify-between items-center flex-wrap gap-2">
@@ -36,9 +60,11 @@ const CostGroupBy = ({ sideFilterOpen, setSideFilterOpen, filterList }) => {
         <div className="flex items-center gap-4 flex-1 min-w-0">
           {/* Badge */}
           <div className="flex items-center gap-3 shrink-0">
-            <span className="text-gray-700 font-medium whitespace-nowrap">Group By:</span>
+            <span className="text-gray-700 font-medium whitespace-nowrap">
+              Group By:
+            </span>
             <span className="rounded-md font-semibold text-sm bg-blue-800 text-white px-3 py-1.5 shadow-sm whitespace-nowrap">
-              {groupBy.label}
+              {formatKeyToLabel(groupBy?.key)}
             </span>
             <span className="h-6 border-r border-gray-300"></span>
           </div>
@@ -64,7 +90,7 @@ const CostGroupBy = ({ sideFilterOpen, setSideFilterOpen, filterList }) => {
                   "
                   onClick={() => selectGroupBy(option)}
                 >
-                  {option.label}
+                  {formatKeyToLabel(option.key)}
                 </span>
               ))}
           </div>
@@ -102,7 +128,7 @@ const CostGroupBy = ({ sideFilterOpen, setSideFilterOpen, filterList }) => {
                     "&:hover": { backgroundColor: "#e8f1ff" },
                   }}
                 >
-                  {option.label}
+                  {formatKeyToLabel(option.key)}
                 </MenuItem>
               ))}
           </Menu>

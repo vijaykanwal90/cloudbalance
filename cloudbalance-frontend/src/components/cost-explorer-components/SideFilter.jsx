@@ -1,21 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FilterSelection from "./FilterSelection";
-const SideFilter = ({ sideFilterOpen, filterList }) => {
+const SideFilter = ({  filterList, query, setQuery }) => {
   const [openedFilter, setOpenedFilter] = useState(null);
   const [filterSelectionBox, setFilterSectionBox] = useState(false);
 
   const openFilterSelection = (filter) => {
-    if(filter===openedFilter){
-        setOpenedFilter(null);
-        return;
+     
+    if (filter === openedFilter) {
+      setOpenedFilter(null);
+      return;
     }
     setOpenedFilter(filter);
-    setFilterSectionBox(!filterSelectionBox);
+    setFilterSectionBox(true);
   };
-  
+ const formatKeyToLabel = (key) => {
+  if (!key) return "";
+
+  // 1. Convert underscores to spaces
+  const withSpaces = key.replace(/_/g, " ");
+
+  // 2. Capitalize first letter of each word, lowercase the rest
+  const label = withSpaces
+    .split(" ")
+    .map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join(" ");
+
+  return label;
+};
   return (
     <div className="min-h-0">
       <div className={`flex justify-between font-bold items-center pt-2 `}>
@@ -34,22 +50,24 @@ const SideFilter = ({ sideFilterOpen, filterList }) => {
               <li
                 key={index}
                 className={`py-2  ${
-                  filterSelectionBox && filter === openedFilter ? "border rounded-sm shadow-lg shadow-gray-300 px-2 m" :"px-2"
+                  filterSelectionBox && filter === openedFilter
+                    ? "  border rounded-sm shadow-lg shadow-gray-300 px-2 m"
+                    : "px-2"
                 }`}
               >
-                <span className="flex gap-4 justify-between my-2">
+                <span
+                  className="flex gap-4 justify-between my-2  cursor-pointer "
+                  onClick={() => openFilterSelection(filter)}
+                >
                   <span className="flex justify-center gap-2">
                     <span className="text-gray-500">
                       <CheckBoxOutlineBlankIcon />
                     </span>
-                    <span
-                      className="cursor-pointer font-bold"
-                      onClick={() => openFilterSelection(filter)}
-                    >
-                      {filter.label}
+                    <span className="cursor-pointer font-bold">
+                      {/* {filter.label} */}
+                      {formatKeyToLabel(filter.key)}
                     </span>
                   </span>
-                  <span className="text-gray-500">include Only</span>
                 </span>
 
                 {filterSelectionBox && filter === openedFilter && (
@@ -59,6 +77,8 @@ const SideFilter = ({ sideFilterOpen, filterList }) => {
                     setFilterSectionBox={setFilterSectionBox}
                     openedFilter={openedFilter}
                     setOpenedFilter={setOpenedFilter}
+                    query={query}
+                    setQuery={setQuery}
                   />
                 )}
                 {filter != openedFilter && (

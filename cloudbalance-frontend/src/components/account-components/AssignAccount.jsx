@@ -24,7 +24,6 @@ const AssignAccount = ({
   }, []);
 
   useEffect(() => {
-    console.log("user accounts are and selectedUser", selectedUser);
 
     const fetchUserAccounts = async () => {
       const res = await userAccountsApi(selectedUser.id);

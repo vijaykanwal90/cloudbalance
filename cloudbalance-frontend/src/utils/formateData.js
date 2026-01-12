@@ -2,7 +2,6 @@ export const formatCostData = (rawData) => {
  
     const months = rawData.data.map(item => item.month);
 
-// console.log(months);
    const filters = [
     ...new Set(
       rawData.data.flatMap(item => Object.keys(item.filters))
@@ -18,7 +17,6 @@ export const formatCostData = (rawData) => {
     };
   })
 }));
-console.log(dataset)
 
   
 const categories = [
@@ -33,7 +31,6 @@ const categories = [
   }
 ];
 
-console.log(categories);
   return {
     chart: {
     

@@ -16,7 +16,6 @@ const Home = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-      console.log(error);
       
       navigate("/login");
     }

@@ -39,7 +39,6 @@ const fetchUser = async () => {
       fetchUsers();
     }
   }, [dispatch, users]);
-  // console.log(selectedUser);
   return (
     <div className="">
       {/* <UserSelector

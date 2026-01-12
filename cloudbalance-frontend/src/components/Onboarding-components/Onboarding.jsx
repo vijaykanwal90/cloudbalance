@@ -16,7 +16,6 @@ const Onboarding = () => {
         fetchAccounts()
        }
   },[accounts])
-  console.log(accounts)
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex justify-end">

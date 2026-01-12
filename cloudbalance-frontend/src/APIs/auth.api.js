@@ -9,13 +9,12 @@ const getCurrentUserApi = ()=>{
 
     try {
       const res = await axiosInstance.get("/auth/me");
-       console.log(res)
+      
       dispatch({
         type: AUTH_SUCCESS,
         payload: res.data   
       });
     } catch (error) {
-      console.log(error)
       dispatch({ type: AUTH_FAILURE });
     }
   };

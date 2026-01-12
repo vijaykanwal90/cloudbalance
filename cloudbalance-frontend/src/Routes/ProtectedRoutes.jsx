@@ -15,7 +15,6 @@ import AccountOnboarding from "../components/Onboarding-components/AccountOnboar
 import AWSServices from "../components/dashboard-components/AWSServices";
 const ProtectedRoutes = () => {
   const { user, isAuthenticated, loading } = useSelector((data) => {
-    console.log(data.auth, "here in navbar");
     return data.auth;
   });
   const dispatch = useDispatch()

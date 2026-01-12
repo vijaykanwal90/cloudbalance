@@ -13,7 +13,6 @@ FusionTheme(FusionCharts);
 
 const graphTypes = ["bar-graph", "line-chart", "stacked-chart"];
 const CostGraphs = ({costData}) => {
-  // console.log(costData)
   const formattedData = formatCostData(costData);
   const [graphType, setGraphType] = useState("bar-graph");
 

@@ -38,7 +38,6 @@ const UserTable = () => {
       fetchUsers();
     }
   }, [dispatch, users]);
-  console.log(users);
   const tableHeadings = useMemo(() => USER_TABLE_HEADINGS, []);
 
   return (

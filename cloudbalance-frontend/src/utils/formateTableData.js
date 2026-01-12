@@ -28,7 +28,6 @@ return {
     costs
   };
 });
-console.log(filterCost)
   return {
     group,
     headings,

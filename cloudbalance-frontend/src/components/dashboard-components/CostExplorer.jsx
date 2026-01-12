@@ -8,33 +8,36 @@ import { getCostByFiltersApi } from "../../APIs/cost.api";
 
 const CostExplorer = () => {
   const [sideFilterOpen, setSideFilterOpen] = useState(false);
-  const [filter,setFilter] = useState(null)
+  const [query,setQuery] = useState({group: "SERVICE"})
   const [costData,setCostData] =  useState(null)
 
    const filterList = [
-  { key: "SERVICE", label: "Service" },
-  { key: "INSTANCE_TYPE", label: "Instance Type" },
-  { key: "ACCOUNT_ID", label: "Account ID" },
-  { key: "USAGE_TYPE", label: "Usage Type" },
-  { key: "PLATFORM", label: "Platform" },
-  { key: "REGION", label: "Region" },
-  { key: "PURCHASE_OPTION", label: "Purchase Option" },
-  { key: "RESOURCE", label: "Resource" },
-  { key: "AVAILABILITY_ZONE", label: "Availability Zone" },
-  { key: "TENANCY", label: "Tenancy" },
-  { key: "LEGAL_ENTITY", label: "Legal Entity" },
-  { key: "BILLING_ENTITY", label: "Billing Entity" },
-];
+  { key: "SERVICE" },
+  { key: "INSTANCE_TYPE" },
+  { key: "ACCOUNT_ID" },
+  { key: "USAGE_TYPE" },
+  { key: "PLATFORM" },
+  { key: "REGION" },
+  { key: "PURCHASE_OPTION" },
+  { key: "RESOURCE" },
+  { key: "AVAILABILITY_ZONE" },
+  { key: "TENANCY" },
+  { key: "LEGAL_ENTITY" },
+  { key: "BILLING_ENTITY" },
+]
+
  useEffect(()=>{
+  console.log("refetch data")
       const fetchCosts = async()=>{
-          const res = await getCostByFiltersApi(filter)
+          const res = await getCostByFiltersApi(query)
+          console.log(res)
           setCostData(res.data)
       }
-      if(!costData){
+    
       fetchCosts()
 
-      }
- },[costData])
+      
+ },[query])
  if(!costData){
   return (
     <>
@@ -42,7 +45,7 @@ const CostExplorer = () => {
     </>
   )
  }
-
+  
   return (
     <div className="mb-8 w-full h-full">
       <div>
@@ -54,7 +57,10 @@ const CostExplorer = () => {
           sideFilterOpen={sideFilterOpen}
           setSideFilterOpen={setSideFilterOpen}
           filterList={filterList}
-        />
+          query={query}
+          setQuery={setQuery}
+
+/>
         
         <div className="flex justify-between mx-4 bg-white">
           <div className="min-w-0 flex flex-col flex-1 transition-all duration-300 ease-in-out mx-4">
@@ -78,7 +84,7 @@ const CostExplorer = () => {
             }`}
           >
             <div className="w-72">
-              <SideFilter filterList={filterList} />
+              <SideFilter filterList={filterList} query={query} setQuery={setQuery}/>
             </div>
           </div>
         </div>
