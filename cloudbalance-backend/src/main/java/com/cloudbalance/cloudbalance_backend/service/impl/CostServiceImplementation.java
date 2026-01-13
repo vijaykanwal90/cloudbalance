@@ -7,18 +7,42 @@ import com.cloudbalance.cloudbalance_backend.service.CostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class CostServiceImplementation  implements CostService {
     private final CostRepository costRepository;
-    public CostExplorerResponseDto getCostByGroup(String groupBy, List<String> groupValues, LocalDate startDate, LocalDate endDate){
-        List<Map<String, Object>> rows = costRepository.getCostByGroup(groupBy , groupValues, startDate, endDate);
+    public CostExplorerResponseDto getCostByGroup(MultiValueMap<String,String> allParams){
+
+        String accountId = allParams.getFirst("accountId");
+        String groupBy = allParams.getFirst("group");
+
+        String startDate = allParams.getFirst("startDate");
+        String endDate = allParams.getFirst("endDate");
+
+
+        Map<String, List<String>> filters = new HashMap<>();
+
+        // Iterate over the request parameters and collect them in the filters map
+        for (Map.Entry<String, List<String>> entry : allParams.entrySet()) {
+            String paramName = entry.getKey();
+            List<String> paramValues = entry.getValue();
+
+            // Skip the params that are not groups (like accountId, startDate, endDate, etc.)
+            if ("accountId".equals(paramName) || "startDate".equals(paramName) || "endDate".equals(paramName) || "group".equals(paramName)) {
+                continue;
+            }
+
+            // Collect the filter values for the current param
+            filters.put(paramName, paramValues);
+        }
+
+
+        List<Map<String, Object>> rows = costRepository.getCostByGroup(accountId,groupBy , filters, startDate, endDate);
         Map<String, Map<String, Long>> monthMap = new LinkedHashMap<>();
 
         for (Map<String, Object> row : rows) {

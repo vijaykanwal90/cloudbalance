@@ -1,6 +1,7 @@
 package com.cloudbalance.cloudbalance_backend.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,7 @@ import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class CostRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -26,12 +28,12 @@ public class CostRepository {
             "LEGAL_ENTITY",
             "BILLING_ENTITY"
     );
-
     public List<Map<String, Object>> getCostByGroup(
+            String accountId,
             String groupBy,
-            List<String> groupValues,
-            LocalDate startDate,
-            LocalDate endDate
+            Map<String, List<String>> filters,
+            String startDate,
+            String endDate
     ) {
 
         if (groupBy == null || groupBy.isBlank()) {
@@ -43,20 +45,37 @@ public class CostRepository {
 
         sql.append("SELECT ")
                 .append("TO_CHAR(BILL_DATE, 'YYYY-MM') AS month, ")
-                .append(groupBy)
+                .append("\"").append(groupBy).append("\"")  // Escape groupBy column if it is a reserved keyword
                 .append(" AS group_value, ")
                 .append("SUM(COST) AS total_cost ")
                 .append("FROM COSTREPORT ")
                 .append("WHERE 1=1 ");
 
-        // 🔹 Filter by group values
-        if (groupValues != null && !groupValues.isEmpty()) {
-            sql.append(" AND ")
-                    .append(groupBy)
-                    .append(" IN (")
-                    .append(String.join(",", Collections.nCopies(groupValues.size(), "?")))
-                    .append(")");
-            params.addAll(groupValues);
+        // 🔹 Filter by accountId (if provided)
+        if (accountId != null && !accountId.isBlank()) {
+            sql.append(" AND ACCOUNT_ID = ?");
+            params.add(accountId);
+        }
+
+        // 🔹 Filter by group values (handle each group dynamically)
+        if (filters != null && !filters.isEmpty()) {
+            for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
+                String filter = entry.getKey();
+                List<String> values = entry.getValue();
+
+                // Dynamically handle each filter group (e.g., 'service', 'platform', etc.)
+                if (values != null && !values.isEmpty()) {
+                    sql.append(" AND \"").append(filter).append("\" IN (");
+                    for (int i = 0; i < values.size(); i++) {
+                        sql.append("?");
+                        if (i < values.size() - 1) {
+                            sql.append(",");
+                        }
+                        params.add(values.get(i));
+                    }
+                    sql.append(")");
+                }
+            }
         }
 
         // 🔹 Date range (between start & end)
@@ -70,13 +89,15 @@ public class CostRepository {
             params.add(endDate);
         }
 
-        sql.append("""
-        GROUP BY
-            TO_CHAR(BILL_DATE, 'YYYY-MM'),
-            """).append(groupBy).append("""
-        ORDER BY month
-    """);
+        // Fix GROUP BY clause formatting and ensure no syntax error
+        sql.append(String.format("""
+    GROUP BY TO_CHAR(BILL_DATE, 'YYYY-MM'), "%s"
+    ORDER BY month
+    """, groupBy));
 
+        // Execute the query using jdbcTemplate and return the results
+        log.info(sql.toString());
+        log.info(params.toArray().toString());
         return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 

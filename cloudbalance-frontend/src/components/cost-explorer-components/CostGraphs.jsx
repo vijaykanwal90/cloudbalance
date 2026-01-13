@@ -8,6 +8,8 @@ import { formatCostData } from "../../utils/formateData";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import TimelineIcon from '@mui/icons-material/Timeline';
 import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
+
+
 Charts(FusionCharts);
 FusionTheme(FusionCharts);
 
@@ -24,11 +26,7 @@ const CostGraphs = ({costData}) => {
       <div className=" flex justify-between ">
         <p>Costs</p>
         <div className="flex gap-4">
-          <div className="border px-2 flex gap-2 text-blue-900 font-bold bg-white ">
-            <button className="cursor-pointer">Start</button>
-
-            <button className="cursor-pointer">End</button>
-          </div>
+          
           <div className="border rounded-sm bg-white cursor-pointer text-gray-600 flex gap-1">
             <BarChartIcon
               onClick={() => {

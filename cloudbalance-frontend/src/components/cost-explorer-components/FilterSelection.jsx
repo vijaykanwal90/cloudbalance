@@ -9,7 +9,7 @@ const FilterSelection = ({
   openedFilter,
   setOpenedFilter,
   query,
-  setQuery
+  setQuery,
 }) => {
   const [subFilters, setSubFilters] = useState([]);
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
@@ -18,23 +18,29 @@ const FilterSelection = ({
     setFilterSectionBox(false);
   };
 
-const handleApply = () => {
-  setQuery((prev) => {
-    const newQuery = {
-      group: filter.key,
-      startDate: prev.startDate,
-      endDate: prev.endDate,
-      [filter.key]: selectedSubFilters,
+  // const handleApply = () => {
+  //   setQuery((prev) => {
+  //     const newQuery = {
+  //       group: filter.key,
+  //       startDate: prev.startDate,
+  //       endDate: prev.endDate,
+  //       [filter.key]: selectedSubFilters,
+  //     };
+
+  //     return newQuery;
+  //   });
+  //   setOpenedFilter(null);
+  //   setFilterSectionBox(false);
+  // };
+  const handleApply = () => {
+      setQuery((prev) => ({
+        ...prev,
+        [filter.key]: selectedSubFilters,
+      }));
+
+      setOpenedFilter(null);
+      setFilterSectionBox(false);
     };
-
-    return newQuery;
-  });
-setOpenedFilter(null);
-    setFilterSectionBox(false);
-};
-
-    
-
   useEffect(() => {
     if (!filter?.key) return;
 
@@ -62,7 +68,17 @@ setOpenedFilter(null);
       }
     });
   };
-  
+  useEffect(() => {
+    if (!filter?.key) return;
+
+    const valuesFromQuery = query?.[filter.key];
+    if (Array.isArray(valuesFromQuery)) {
+      setSelectedSubFilters(valuesFromQuery);
+    } else {
+      setSelectedSubFilters([]);
+    }
+  }, [filter, query]);
+
   return (
     <div className="z-50 bg-white min-h-0">
       <span>No filters currently added.</span>

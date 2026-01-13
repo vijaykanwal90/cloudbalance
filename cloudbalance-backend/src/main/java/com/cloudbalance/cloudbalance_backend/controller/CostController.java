@@ -37,35 +37,9 @@ public class CostController {
     public ResponseEntity<CostExplorerResponseDto> getCostByGroup(@RequestParam MultiValueMap<String, String> allParams
 
     ) {
-        String group = allParams.getFirst("group");
-        List<String> groupValues =  allParams.getOrDefault(group, new ArrayList<>());
-        String startDateStr = allParams.getFirst("startDate");
-        String endDateStr = allParams.getFirst("endDate");
-        LocalDate startDate = null;
-        LocalDate endDate = null;
 
-        if (startDateStr!=null  && !startDateStr.isEmpty()) {
-            startDate = LocalDate.parse(startDateStr);
-        }
-        if (endDateStr!=null && !endDateStr.isEmpty()) {
-            endDate = LocalDate.parse(endDateStr);
-        }
-//        List<String> groupValues = switch (group.toLowerCase()) {
-//            case "service" -> service;
-//            case "instance_type" -> instanceType;
-//            case "account_id" -> accountId;
-//            case "usage_type" -> usageType;
-//            case "platform" -> platform;
-//            case "region" -> region;
-//            case "purchase_option" -> purchaseOption;
-//            case "resource" -> resource;
-//            case "availability_zone" -> availabilityZone;
-//            case "tenancy" -> tenancy;
-//            case "legal_entity" -> legalEntity;
-//            case "billing_entity" -> billingEntity;
-//            default -> throw new IllegalArgumentException("Invalid group: " + group);
-//        };
-        CostExplorerResponseDto response =  costService.getCostByGroup(group, groupValues, startDate, endDate);
+
+        CostExplorerResponseDto response = costService.getCostByGroup(allParams);
         return ResponseEntity.status(200).body(response);
     }
 
