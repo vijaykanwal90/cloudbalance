@@ -8,35 +8,46 @@ import { SidebarContext } from "../context/SidebarContext";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLogout } from "../hooks/useLogout";
 import { useDispatch, useSelector } from "react-redux";
-import { myAccountsApi } from "../APIs/account.api";
+import { myAccountsApi ,getAllAccountsApi} from "../APIs/account.api";
 import { getCurrentUserApi } from "../APIs/auth.api";
 const Navbar = () => {
   // const navigate = useNavigate();
   const { isCollapased, toggleisCollapased } = useContext(SidebarContext);
   const logout = useLogout();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [userAccounts, setUserAccount] = useState([]);
   const { user, isAuthenticated, loading } = useSelector((data) => {
     return data.auth;
   });
-  
-  useEffect(()=>{
-      if(!user){
-        dispatch(getCurrentUserApi());
-      }
-  },[user])
 
   useEffect(() => {
-    const fetchMyAccounts = async () => {
-      const res = await myAccountsApi();
-      if (res.status == 200) {
+    if (!user) {
+      dispatch(getCurrentUserApi());
+    }
+    console.log("user useEffect")
+  }, [user]);
+ 
+  useEffect(() => {
+  if (!user) return;
+
+  const fetchAccounts = async () => {
+    try {
+      const res =
+        user.role === "CUSTOMER"
+          ? await myAccountsApi()
+          : await getAllAccountsApi();
+
+      if (res.status === 200) {
         setUserAccount(res.data);
       }
-    };
-    if (!userAccounts || userAccounts.length === 0) {
-      fetchMyAccounts();
+    } catch (error) {
+      console.error("Account fetch failed", error);
     }
-  }, [user]);
+  };
+
+  fetchAccounts();
+}, [user]);
+
 
   return (
     <div className="w-full fixed top-0 left-0 flex justify-between py-4 px-6 h-16 bg-white shadow-gray-300 shadow-lg  z-30">
@@ -48,7 +59,7 @@ const Navbar = () => {
           {isCollapased ? <MenuIcon /> : <CloseIcon />}
           {/* <isCollapasedIcon /> */}
         </button>
-        {userAccounts.length > 0  && (
+        {userAccounts.length > 0 && (
           <div className="flex flex-col">
             <label htmlFor="account">Account</label>
             <select name="account" id="account">

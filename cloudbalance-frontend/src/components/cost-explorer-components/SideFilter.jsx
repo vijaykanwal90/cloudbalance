@@ -35,7 +35,6 @@ const SideFilter = ({ filterList, query, setQuery }) => {
   return Array.isArray(value) ? value.length > 0 : !!value;
 };
 
-  console.log(openedFilter);
   return (
     <div className="min-h-0">
       <div className={`flex justify-between font-bold items-center pt-2 `}>

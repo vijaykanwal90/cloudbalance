@@ -71,13 +71,13 @@ const AssignAccount = ({
   };
 
   return (
-    <div className="w-full  flex flex-col">
-      <h3 className="text-sm font-semibold  text-gray-700">
+    <div className="w-[80%] mt-4 flex flex-col">
+      {/* <h3 className="text-sm font-semibold  text-gray-700">
         Account Assignment
-      </h3>
+      </h3> */}
 
       <div className="flex gap-6 items-stretch flex-1">
-        <div className="w-1/2 bg-gray-50 rounded-md px-1 py-2 border">
+        <div className="w-1/2 bg-gray-50   border">
           <AccountList
             title="Available Accounts"
             accounts={unassignedAccounts}
@@ -105,7 +105,7 @@ const AssignAccount = ({
         </div>
 
         {/* RIGHT */}
-        <div className="w-1/2 bg-gray-50 rounded-md px-1 py-2 border flex flex-col">
+        <div className="w-1/2 bg-gray-50   border flex flex-col">
           <AccountList
             title="Assigned Accounts"
             accounts={assignedAccounts}

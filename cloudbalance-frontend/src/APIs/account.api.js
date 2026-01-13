@@ -17,6 +17,7 @@ return axiosInstance.get(`/account/user-accounts/${userId}`)
 }
 
 const myAccountsApi = ()=>{
+      console.log("my accounts")
 return axiosInstance.get('/account/my-accounts')
 }
 const onboardAccountApi = (formData)=>{

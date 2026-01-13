@@ -29,7 +29,7 @@ const jsonData = {
 };
 const awsLink =
     "https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fus-east-1.console.aws.amazon.com%2Fiamv2%2Fhome%3Fregion%3Dus-east-1%26state%3DhashArgs%2523%252Froles%252Fcreate%253Fstep%253DselectEntities%26isauthcode%3Dtrue&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fiamv2&forceMobileApp=0&code_challenge=myxXjgemIjRXzXBMbstyWH9ZOpslWbJcN0xBiLWg6ng&code_challenge_method=SHA-256";
-const CreateIamRole = ({formData,setFormData}) => {
+const CreateIamRole = ({formData,setFormData, errors}) => {
   const handleChange = (e) => {
   const { name, value } = e.target;
     
@@ -125,6 +125,7 @@ const CreateIamRole = ({formData,setFormData}) => {
                 onChange={handleChange}
 
               />
+               {errors.accountARN && <p className="text-red-500 text-sm">{errors.accountARN}</p>}
             </div>
             <div className="flex flex-col">
               <label htmlFor="">Enter the account Id</label>
@@ -137,6 +138,7 @@ const CreateIamRole = ({formData,setFormData}) => {
 
                 className="input-boxes"
               />
+               {errors.accountId && <p className="text-red-500 text-sm">{errors.accountId}</p>}
             </div>
             <div className="flex flex-col">
               <label htmlFor="">Enter the Account Name</label>
@@ -148,6 +150,7 @@ const CreateIamRole = ({formData,setFormData}) => {
                 className="input-boxes"
                 name="accountName"
               />
+               {errors.accountName && <p className="text-red-500 text-sm">{errors.accountName}</p>}
             </div>
           </div>
         </div>

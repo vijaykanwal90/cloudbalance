@@ -7,7 +7,6 @@ const getKeysOfGroupApi = (group)=>{
 }
 const getCostByFiltersApi = (query) =>{
      const queryString = buildQueryString(query)
-     console.log(queryString)
     return axiosInstance.get(`/costexplorer/getCost?${queryString}`)
 }
 export {getKeysOfGroupApi, getCostByFiltersApi}

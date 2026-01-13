@@ -18,29 +18,15 @@ const FilterSelection = ({
     setFilterSectionBox(false);
   };
 
-  // const handleApply = () => {
-  //   setQuery((prev) => {
-  //     const newQuery = {
-  //       group: filter.key,
-  //       startDate: prev.startDate,
-  //       endDate: prev.endDate,
-  //       [filter.key]: selectedSubFilters,
-  //     };
-
-  //     return newQuery;
-  //   });
-  //   setOpenedFilter(null);
-  //   setFilterSectionBox(false);
-  // };
   const handleApply = () => {
-      setQuery((prev) => ({
-        ...prev,
-        [filter.key]: selectedSubFilters,
-      }));
+    setQuery((prev) => ({
+      ...prev,
+      [filter.key]: selectedSubFilters,
+    }));
 
-      setOpenedFilter(null);
-      setFilterSectionBox(false);
-    };
+    setOpenedFilter(null);
+    setFilterSectionBox(false);
+  };
   useEffect(() => {
     if (!filter?.key) return;
 

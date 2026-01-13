@@ -37,34 +37,24 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
   };
 
   return (
-    <div className="bg-white w-full  h-75  shadow-sm flex flex-col">
+    <div className=" w-full h-75 shadow  bg-white border-gray-200 ">
       {/* HEADER */}
-      <div className="h-12 flex items-center justify-between border-b">
-        <span className="text-sm font-semibold text-gray-700">{title}</span>
-        <span className="text-xs text-gray-500">
+      <div className="h-12  flex items-center px-2  justify-between border-b text-white bg-sky-600 ">
+        <span className="text-sm font-semibold ">{title}</span>
+        <span className="text-xs ">
           {accounts.length} {accounts.length === 1 ? "item" : "items"}
         </span>
       </div>
 
-      <div className=" py-4 flex-1 flex flex-col overflow-hidden">
-        {/* <div className="flex items-center gap-2 border rounded-md px-3 py-2 mb-3 bg-white">
-          <SearchIcon fontSize="small" className="text-gray-400" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search accounts..."
-            className="w-full text-sm border-none outline-none focus:ring-0"
-          />
-        </div> */}
-
+      <div className="  flex-1 flex flex-col overflow-hidden">
         {/* SELECT ALL */}
-        <div className="flex items-center  border-b pb-2 mb-2 text-sm text-gray-700">
+        <div className="flex items-center border-b   text-sm text-gray-700">
           <Checkbox
             size="small"
             checked={isAllSelected}
             indeterminate={selected.length > 0 && !isAllSelected}
             onChange={toggleSelectAll}
+            className="p-0"
           />
           <span className="font-medium">
             {isAllSelected ? "Unselect all" : "Select all"}
@@ -72,7 +62,7 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
         </div>
 
         {/* LIST */}
-        <div className="flex-1  overflow-y-scroll  pr-1">
+        <div className="flex-1 overflow-y-auto pr-1">
           <ul className="space-y-1">
             {filteredAccounts.map((account) => {
               const isSelected = selectedIds.has(account.id);
@@ -81,15 +71,19 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
                 <li
                   key={account.id}
                   onClick={() => toggleSelectOne(account)}
-                  className={`flex items-center gap-2 px-2 py-2 border-b border-2 rounded-md  cursor-pointer text-sm transition-colors
+                  className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer text-sm transition
                     ${
                       isSelected
-                        ? "bg-sky-50 text-sky-700 border border-sky-200"
-                        : "hover:bg-gray-50 border border-transparent"
+                        ? "bg-sky-100 text-sky-700"
+                        : "hover:bg-gray-100"
                     }
                   `}
                 >
-                  <Checkbox size="small" checked={isSelected} />
+                  <Checkbox
+                    size="small"
+                    checked={isSelected}
+                    className="p-0"
+                  />
                   <span className="truncate">{account.accountName}</span>
                 </li>
               );

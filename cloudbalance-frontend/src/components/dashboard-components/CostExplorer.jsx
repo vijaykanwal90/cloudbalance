@@ -30,7 +30,6 @@ const CostExplorer = () => {
   console.log("refetch data")
       const fetchCosts = async()=>{
           const res = await getCostByFiltersApi(query)
-          console.log(res)
           setCostData(res.data)
       }
     

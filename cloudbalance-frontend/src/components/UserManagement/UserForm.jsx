@@ -7,8 +7,9 @@ import {
 } from "../../APIs/user.api";
 import { roles } from "../../constants/roles";
 import AssignAccount from "../account-components/AssignAccount";
+import { toast } from "sonner";
 
-const UserForm = ({ id, isEditMode, onSuccess }) => {
+const UserForm = ({ id, isEditMode }) => {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -21,7 +22,7 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [fetchingUser, setFetchingUser] = useState(false);
   const [selectedAccountIds, setSelectedAccountIds] = useState([]);
-
+  const [error, setError] = useState({});
   useEffect(() => {
     const fetchUser = async () => {
       setFetchingUser(true);
@@ -58,18 +59,41 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
   };
 
   const validateForm = () => {
-    if (!form.firstName.trim()) return false;
-    if (!form.lastName.trim()) return false;
-    if (!form.email.trim()) return false;
-    if (!validateEmail(form.email)) return false;
-    if (!form.role) return false;
-    if (!isEditMode && !form.password.trim()) return false;
-    return true;
+    const newErrors = {};
+
+    if (!form.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    } else if (
+      form.firstName.trim().length < 3 ||
+      form.firstName.trim().length > 20
+    ) {
+      newErrors.firstName = "First name must be between 3 and 20 characters";
+    }
+
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(form.email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    if (!form.role) {
+      newErrors.role = "Role is required";
+    }
+
+    if (!isEditMode && !form.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+
+    setError(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
+    console.log("handle submit");
     if (!validateForm()) return;
-
+    console.log("create user clicked");
+   
     setLoading(true);
     try {
       let payload;
@@ -81,22 +105,26 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
         payload = { ...form };
       }
 
-     
       if (payload.role === "customer" && selectedAccountIds?.length > 0) {
         payload.accountIds = selectedAccountIds;
       }
       if (isEditMode) {
-        
-
-        await updateUserApi(id, payload);
+        const res =  await updateUserApi(id, payload);
+        if(res.status==200){
+          console.log("updated")
+          toast.success("user updated succesfully")
+        }
       } else {
         const res = await createUserApi(payload);
+        console.log("created")
+        toast.success("User created successfully")
         setSelectedUser(res?.data || null);
       }
 
-      onSuccess?.();
+      
     } catch (error) {
       console.error(error);
+      toast.error(error)
     } finally {
       setLoading(false);
     }
@@ -104,7 +132,7 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
 
   if (fetchingUser) {
     return (
-      <div className="w-full flex justify-center py-8">
+      <div className="w-full flex justify-center py-8 ">
         <div className="w-[95%] bg-white p-8 rounded-md shadow-sm flex items-center justify-center min-h-[600px]">
           <p className="text-gray-500">Loading user details...</p>
         </div>
@@ -113,15 +141,15 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
   }
 
   return (
-    <div className="w-full flex justify-center py-8">
-      <div className="w-[95%] flex gap-6">
-        <div className="w-1/2 bg-white rounded-md shadow-sm">
-          <div className="p-8 h-full flex flex-col">
-            <h2 className="text-lg font-semibold text-gray-800 mb-6">
+    <div className="w-full    overflow-y-hidden">
+      {/* <div className="w-[95%] "> */}
+        <div className="w-1/2 p-2 bg-white rounded-md shadow-sm ">
+          <div className=" h-full flex flex-col">
+            <h2 className="text-lg font-semibold text-gray-800 ">
               {isEditMode ? "Edit User" : "Add New User"}
             </h2>
 
-            <div className="grid grid-cols-2 gap-4 flex-1">
+            <div className="grid grid-cols-2 gap-4 flex-1 ">
               <div className="flex flex-col">
                 <label className="mb-1 text-sm font-medium text-gray-700">
                   First Name <span className="text-red-500">*</span>
@@ -134,6 +162,9 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
                   disabled={loading}
                   className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                 />
+                {error.firstName && (
+                  <p className="text-red-500 text-sm">{error.firstName}</p>
+                )}
               </div>
 
               <div className="flex flex-col">
@@ -162,6 +193,9 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
                   disabled={loading}
                   className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                 />
+                {error.email && (
+                  <p className="text-red-500 text-sm">{error.email}</p>
+                )}
               </div>
 
               {!isEditMode && (
@@ -177,6 +211,9 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
                     disabled={loading}
                     className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
                   />
+                  {error.password && (
+                    <p className="text-red-500 text-sm">{error.password}</p>
+                  )}
                 </div>
               )}
 
@@ -198,10 +235,13 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
                     </option>
                   ))}
                 </select>
+                {error.role && (
+                  <p className="text-red-500 text-sm">{error.role}</p>
+                )}
               </div>
             </div>
 
-            <div className="flex gap-4 mt-6 pt-6 ">
+            <div className="flex gap-4 mt-2  ">
               <button
                 onClick={handleSubmit}
                 disabled={loading}
@@ -217,8 +257,8 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
           </div>
         </div>
 
-        <div className="w-1/2 relative">
-          <div
+        <div className=" relative ">
+          {/* <div
             className={`
               absolute inset-0 bg-white rounded-md shadow-sm
               transition-all duration-300 ease-out
@@ -228,17 +268,20 @@ const UserForm = ({ id, isEditMode, onSuccess }) => {
                   : "opacity-0 scale-95 pointer-events-none"
               }
             `}
-          >
-            <div className=" px-2 py-2 h-full">
+          > */}
+          { form.role ==="customer" && 
+            <div className=" px-2  h-full transition-all duration-300 ease-in-out
+ ">
               <AssignAccount
                 selectedUser={isEditMode ? selectedUser : null}
                 setSelectedAccountIds={setSelectedAccountIds}
               />
             </div>
-          </div>
+}
+          {/* </div> */}
         </div>
       </div>
-    </div>
+    // </div>
   );
 };
 
