@@ -40,7 +40,7 @@ const sidebarList = [
 
 const Sidebar = () => {
   const { isCollapsed } = useContext(SidebarContext);
-  const { user, isAuthenticated, loading } = useSelector((data) => {
+  const { user,  loading } = useSelector((data) => {
     return data.auth;
   });
 

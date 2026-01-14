@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoginFooter from "../components/footers/LoginFooter";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEyeSlash } from "react-icons/fa";
@@ -6,116 +6,105 @@ import { toast } from "sonner";
 import { loginApi } from "../APIs/auth.api";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../utils/formValidation";
-import { useDispatch } from "react-redux";
-import { getCurrentUserApi } from "../APIs/auth.api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCurrentUser } from "../redux/actions/auth-action";
+
 const Login = () => {
   const [form, setForm] = useState({
     email: "admin@gmail.com",
     password: "admin123",
   });
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch();
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const { user, loading } = useSelector((state) => state.auth);
+  // const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "email") {
-      // setForm({ ...form, email: value });
-      setForm((prev) => ({ ...prev, email: value }));
-    } else if (name === "password") {
-      setForm((prev) => ({ ...prev, password: value }));
-    }
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleShowPassword = () => setShowPassword((prev) => !prev);
+
   const validateForm = ({ email, password }) => {
-    let isValid = true;
-
-    // Trim inputs
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
-
-    // Email validation
-    if (!validateEmail(trimmedEmail)) {
+    if (!validateEmail(email.trim())) {
       toast.error("Email is not valid");
-      isValid = false;
-      return isValid;
+      return false;
     }
-
-    // Password validation
-    if (trimmedPassword.length === 0) {
+    if (!password.trim()) {
       toast.error("Password can't be empty");
-      isValid = false;
-      return isValid;
-    } else if (trimmedPassword.length < 6) {
-      toast.error("Password should be at least 6 characters");
-      isValid = false;
-      return isValid;
+      return false;
     }
-
-    return isValid;
+    if (password.trim().length < 6) {
+      toast.error("Password should be at least 6 characters");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm(form)) return;
 
-    if (!validateForm(form)) {
-      return;
-    }
     try {
       const res = await loginApi(form);
-      if (res.status == 200) {
-        dispatch(getCurrentUserApi());
-        navigate("/dashboard");
+      if (res.status === 200) {
+        toast.success("Login successful!");
+        navigate("/dashboard", { replace: true });
       }
-      console.log(res);
-      toast.success(res?.data);
     } catch (error) {
-      let message = error.response.data.errors;
-
-      toast.error(message);
+      toast.error(error?.response?.data?.errors || "Login failed");
     }
   };
-  // useEffect(() => {}, [ navigate]);
+
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, navigate]);
+
   return (
     <>
-      <form className="w-80 mt-48 mx-auto " onSubmit={handleSubmit}>
-        <div className=" w-full flex flex-col gap-6 items-center ">
-          <div className="mx-auto relative">
-            <img src="./cloudkeeper_logo.svg" alt="Cloudkeeper" />
-          </div>
+      <form className="w-80 mt-48 mx-auto" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-6 items-center w-full">
+          <img
+            src="./cloudkeeper_logo.svg"
+            alt="Cloudkeeper"
+            className="mx-auto"
+          />
 
           <div className="w-full">
-            <label htmlFor="">Email</label>
+            <label>Email</label>
             <input
-              className=" w-full py-1  px-2 border-2 border-gray-300"
+              className="w-full py-1 px-2 border-2 border-gray-300"
               type="email"
               name="email"
-              onChange={handleChange}
               value={form.email}
+              onChange={handleChange}
             />
           </div>
+
           <div className="w-full relative">
-            <label htmlFor="password">Password</label>
+            <label>Password</label>
             <input
-              className="w-full px-2 py-1 border-2 border-gray-300"
+              className="w-full py-1 px-2 border-2 border-gray-300"
               type={showPassword ? "text" : "password"}
               name="password"
-              onChange={handleChange}
               value={form.password}
+              onChange={handleChange}
             />
             <button
+              type="button"
               className="absolute top-8 right-4"
               onClick={handleShowPassword}
-              type="button"
             >
               {showPassword ? <MdOutlineRemoveRedEye /> : <FaRegEyeSlash />}
             </button>
           </div>
 
           <button
-            className="w-full text-white  bg-sky-600  py-2 mt-2 cursor-pointer"
+            className="w-full py-2 mt-2 bg-sky-600 text-white cursor-pointer"
             type="submit"
           >
             Login

@@ -1,7 +1,6 @@
-import { ADD_USER, REMOVE_USER, AUTH_FAILURE, AUTH_SUCCESS  } from "../actions/action-type";
+import { REMOVE_USER, AUTH_SUCCESS } from "../actions/action-type";
 const initialState = {
   user: null,
-  isAuthenticated: false,
   loading: true,
 };
 function authReducer(state = initialState, action) {
@@ -9,15 +8,15 @@ function authReducer(state = initialState, action) {
     case AUTH_SUCCESS:
       return {
         ...state,
-        loading: false,
-        user: action.payload,
-        isAuthenticated: true,
-      };
 
-    case AUTH_FAILURE:
-    // case LOGOUT:
+        user: action.payload,
+        loading: false,
+      };
+    case REMOVE_USER:
       return {
-        ...initialState,
+        ...state,
+        user: null,
+        loading: false,
       };
     default:
       return state;

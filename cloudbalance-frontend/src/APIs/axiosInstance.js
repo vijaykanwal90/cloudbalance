@@ -26,7 +26,7 @@ axiosInstance.interceptors.response.use(
       error.response?.status === 401 &&
       originalRequest.url?.includes("/auth/logout")
     ) {
-      alert("loggin out")
+     
       redirectToLogin();
       return Promise.reject(error);
     }

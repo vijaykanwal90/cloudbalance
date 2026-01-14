@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { myAccountsApi, getAllAccountsApi } from "../APIs/account.api";
 import { getCurrentUserApi } from "../APIs/auth.api";
 import { addToQuery } from "../redux/actions/query-action";
+import { fetchCurrentUser } from "../redux/actions/auth-action";
 const Navbar = () => {
   // const navigate = useNavigate();
   const { isCollapsed, toggleisCollapsed } = useContext(SidebarContext);
@@ -30,7 +31,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!user) {
-      dispatch(getCurrentUserApi());
+      dispatch(fetchCurrentUser());
     }
     
   }, [user]);

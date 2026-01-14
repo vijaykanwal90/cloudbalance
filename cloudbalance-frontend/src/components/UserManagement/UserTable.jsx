@@ -7,7 +7,7 @@ import { USER_TABLE_HEADINGS } from "../../constants/userTableHeading";
 import { formatDateTime } from "../../utils/formateDate";
 import { getAllUserApi } from "../../APIs/user.api";
 import { addUsers } from "../../redux/actions/user-action";
-import { getCurrentUserApi } from "../../APIs/auth.api";
+import { fetchCurrentUser } from "../../redux/actions/auth-action";
 
 const UserTable = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const UserTable = () => {
 
   useEffect(() => {
     if (!user) {
-      dispatch(getCurrentUserApi());
+      dispatch(fetchCurrentUser());
     }
   }, [user]);
   const users = useSelector((store) => store.users.users);

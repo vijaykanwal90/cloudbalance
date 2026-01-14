@@ -39,9 +39,8 @@ const CostExplorer = () => {
     );
   }, []);
   useEffect(() => {
-   
     const fetchCosts = async () => {
-      console.log(query)
+      console.log(query);
       const res = await getCostByFiltersApi(query);
       setCostData(res.data);
     };
@@ -72,7 +71,7 @@ const CostExplorer = () => {
             </div>
 
             <div className="my-2 text-center text-blue-900 bg-blue-200 h-16 border border-blue-800 flex items-center justify-center rounded-sm">
-              <p>Here  we are showing Cost of records.</p>
+              <p>Here we are showing Cost of records.</p>
             </div>
 
             <div>

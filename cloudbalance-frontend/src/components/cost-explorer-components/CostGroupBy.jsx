@@ -1,15 +1,11 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Menu, MenuItem } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useDispatch, useSelector } from "react-redux";
 import { addToQuery } from "../../redux/actions/query-action";
-const CostGroupBy = ({
-  
-  sideFilterOpen,
-  setSideFilterOpen,
-  filterList,
-}) => {
+import { green } from "@mui/material/colors";
+const CostGroupBy = ({ sideFilterOpen, setSideFilterOpen, filterList }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const query = useSelector((state) => state.query);
   const dispatch = useDispatch();
@@ -37,8 +33,7 @@ const CostGroupBy = ({
     return label;
   };
   const selectGroupBy = (option) => {
-   
-    dispatch(addToQuery({group:option.key}))
+    dispatch(addToQuery({ group: option.key }));
     setAnchorEl(null);
   };
 
@@ -59,37 +54,38 @@ const CostGroupBy = ({
       endDateInput.disabled = false;
     }
     if (startDateInput.value && endDateInput.value) {
-     
-      dispatch(addToQuery({
-        startDate: startDateInput.value,
-        endDate: endDateInput.value,
-      }))
+      dispatch(
+        addToQuery({
+          startDate: startDateInput.value,
+          endDate: endDateInput.value,
+        })
+      );
     }
   };
 
   return (
     <div className="border-b bg-white px-4 py-3">
-      <div className="flex justify-between items-center flex-wrap gap-2">
-        <div className="flex items-center gap-4 flex-1 min-w-0 ">
-          <div className="flex items-center gap-3 shrink-0">
+      <div className="flex   gap-2">
+        <div className="flex justify-between  items-center gap-4 flex-none w-[60%]">
+          <div className="flex items-center gap-3  ">
             <span className="text-gray-700 font-medium whitespace-nowrap">
               Group By:
             </span>
-            <span className="rounded-md font-semibold text-sm bg-blue-800 text-white px-3 py-1.5 shadow-sm whitespace-nowrap">
+            <span className="rounded-md font-semibold text-sm bg-blue-800 text-white px-3 py-1.5 shadow-sm  w-auto          
+    max-w-[150px]">
               {formatKeyToLabel(groupBy?.key)}
             </span>
-            <span className="h-6 border-r border-gray-300"></span>
+            <span className="h-full border-r border-gray-300"></span>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap overflow-x-auto max-w-full">
+          <div className="flex items-center gap-2 ">
             {mainList
-              .filter((option) => option.key !== groupBy.key) // exclude selected
+              .filter((option) => option.key !== groupBy.key)
               .map((option) => (
                 <span
                   key={option.key}
                   className="
-                    rounded-md 
-                    text-blue-800 
+                    rounded-md  text-blue-800 
                     font-semibold 
                     border border-gray-300 
                     text-sm px-3 py-1.5 
@@ -97,7 +93,11 @@ const CostGroupBy = ({
                     hover:bg-blue-50
                     cursor-pointer 
                     transition-all
-                    whitespace-nowrap
+      whitespace-nowrap
+                    text-center
+                    w-auto          
+    max-w-[120px]
+                  
                   "
                   onClick={() => selectGroupBy(option)}
                 >
@@ -128,6 +128,7 @@ const CostGroupBy = ({
                   minWidth: 200,
                   padding: "4px 0",
                   borderRadius: "10px",
+                  backgroundColor: green,
                 },
               }}
             >
@@ -149,7 +150,7 @@ const CostGroupBy = ({
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className=" flex gap-2 my-auto flex-1 justify-end">
           <div className="border px-2 flex gap-2 text-blue-900 font-bold bg-white ">
             <input type="date" id="start-date" onChange={handleChange} />
             <span className="border"></span>
@@ -158,7 +159,7 @@ const CostGroupBy = ({
           </div>
 
           <div
-            className={`cursor-pointer border-2 rounded-md px-1 py-1 shrink-0 ${
+            className={`cursor-pointer border-2 rounded-md px-1 py-auto shrink-0 ${
               sideFilterOpen
                 ? "bg-blue-800 text-white border-blue-800"
                 : "bg-white text-blue-800 border-blue-800"
