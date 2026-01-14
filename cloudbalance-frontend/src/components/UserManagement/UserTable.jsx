@@ -41,61 +41,60 @@ const UserTable = () => {
   const tableHeadings = useMemo(() => USER_TABLE_HEADINGS, []);
 
   return (
-    <div className="pl-4 mt-4 pb-4">
+    <div className="p-6">
       {user?.role === "ADMIN" && (
-        <div className="flex gap-4 mb-4">
+        <div className="flex justify-start mb-6">
           <Link to="/dashboard/user-management/adduser">
-            <button className="px-4 py-2 bg-sky-800 rounded-md text-white cursor-pointer">
+            <button className="px-5 py-2 bg-sky-800 hover:bg-sky-700 text-white font-medium rounded-md shadow">
               Add User
             </button>
           </Link>
         </div>
       )}
-      <div className="overflow-x-auto">
-        <table className="w-[90%] border border-slate-300">
-          <thead>
-            <tr className="bg-sky-800 text-white">
+
+      <div className="overflow-x-auto shadow rounded-lg bg-white border border-slate-200">
+        <table className="min-w-full divide-y divide-slate-200">
+          <thead className="bg-sky-900 sticky top-0">
+            <tr>
               {tableHeadings.map((heading) => (
-                <th key={heading.key} className="px-4 py-2 text-left">
+                <th
+                  key={heading.key}
+                  className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                >
                   {heading.label}
                 </th>
               ))}
             </tr>
           </thead>
 
-          <tbody>
+          <tbody className="divide-y divide-slate-200">
             {users.map((listUser, index) => (
               <tr
                 key={listUser.id}
-                className={`${
-                  index % 2 === 0 ? "bg-slate-100" : "bg-slate-200"
-                } hover:bg-slate-300`}
+                className={`transition-colors ${
+                  index % 2 === 0 ? "bg-slate-50" : "bg-slate-100"
+                } hover:bg-slate-200`}
               >
                 {tableHeadings.map((heading) => (
-                  <td key={heading.key} className="px-4 py-3">
-                    { heading.key === "actions" ? (
-                      <span className="flex gap-4 justify-center">
-                        {/* Edit → not admin */}
-
+                  <td
+                    key={heading.key}
+                    className="px-6 py-4 text-sm text-slate-700"
+                  >
+                    {heading.key === "actions" ? (
+                      <div className="flex gap-3 justify-center items-center">
                         {user?.role === "ADMIN" ? (
                           <Link
                             to={`/dashboard/user-management/edituser/${listUser.id}`}
+                            className="text-sky-700 hover:text-sky-900"
                           >
                             <EditIcon fontSize="small" />
                           </Link>
                         ) : (
-                          <span className="opacity-50 cursor-not-allowed">
+                          <span className="opacity-40 cursor-not-allowed">
                             <EditIcon fontSize="small" />
                           </span>
                         )}
-
-                        {/* Manage Account → only customer */}
-                        {listUser.role === "CUSTOMER" && (
-                          <Link to={`/dashboard/assign-account/${listUser.id}`}>
-                            <ManageAccountsIcon fontSize="small" />
-                          </Link>
-                        )}
-                      </span>
+                      </div>
                     ) : heading.key === "lastLogin" ? (
                       formatDateTime(listUser[heading.key])
                     ) : (
@@ -109,7 +108,9 @@ const UserTable = () => {
         </table>
 
         {users.length === 0 && (
-          <p className="text-center text-slate-500 mt-4">No users found</p>
+          <div className="text-center text-slate-500 py-6 font-medium">
+            No users found
+          </div>
         )}
       </div>
     </div>

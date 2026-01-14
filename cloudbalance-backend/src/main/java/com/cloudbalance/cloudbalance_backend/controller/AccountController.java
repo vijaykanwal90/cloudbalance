@@ -4,6 +4,7 @@ import com.cloudbalance.cloudbalance_backend.dto.AccountAssignDto;
 import com.cloudbalance.cloudbalance_backend.dto.AccountResponseDto;
 import com.cloudbalance.cloudbalance_backend.dto.CreateAccountDto;
 import com.cloudbalance.cloudbalance_backend.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,6 +40,12 @@ public class AccountController {
 
         return accountService.assignAccounts(userId, accountAssignDto);
     }
+   @PreAuthorize("hasAnyRole('ADMIN','READ_ONLY')")
+   @GetMapping("/orphan-account")
+   public ResponseEntity<?> getOrphanAccounts(){
+        List<AccountResponseDto> orphanAccounts = accountService.getOrphanAccounts();
+        return ResponseEntity.status(200).body(orphanAccounts);
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN','READ_ONLY')")
     @GetMapping("/user-accounts/{userId}")
@@ -56,7 +63,7 @@ public class AccountController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<?> onboardAccount(@RequestBody CreateAccountDto createAccountDto) {
+    public ResponseEntity<?> onboardAccount(@Valid @RequestBody CreateAccountDto createAccountDto) {
         return accountService.onboardAccount(createAccountDto);
 
     }

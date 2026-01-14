@@ -14,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateUserDto {
-//    @NotBlank
-//    @Size(min=3, max = 20, message = "First name should be at least  3 and less than equal to 20")
+    @NotBlank
+    @Size(min=3, max = 20, message = "First name should be at least  3 and less than equal to 20")
     private  String firstName;
 
     private  String lastName;
 
-//    @NotBlank
+
     @Email
     private  String email;
 

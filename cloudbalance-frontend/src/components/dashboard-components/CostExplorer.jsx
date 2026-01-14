@@ -11,7 +11,7 @@ import { addToQuery } from "../../redux/actions/query-action";
 // import { data } from "react-router-dom";
 const CostExplorer = () => {
   const [sideFilterOpen, setSideFilterOpen] = useState(false);
-  // const [query,setQuery] = useState({group: "SERVICE"})
+  const [loading, setLoading] = useState(false);
   const [costData, setCostData] = useState(null);
   const query = useSelector((state) => {
     return state.query;
@@ -41,14 +41,38 @@ const CostExplorer = () => {
   useEffect(() => {
     const fetchCosts = async () => {
       console.log(query);
-      const res = await getCostByFiltersApi(query);
-      setCostData(res.data);
+      if (query?.accountId) {
+        const res = await getCostByFiltersApi(query);
+        setCostData(res.data);
+      }
     };
 
     fetchCosts();
   }, [query]);
-  if (!costData) {
-    return <>loading...</>;
+  if (!query?.accountId) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg px-6 py-4 text-gray-600 text-center shadow-sm">
+          <p className="text-lg font-semibold">No Account Assigned</p>
+          <p className="text-sm mt-1">
+            Please assign an account to view cost data.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!costData || costData.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg px-6 py-4 text-gray-600 text-center shadow-sm">
+          <p className="text-lg font-semibold">No Cost Data Found</p>
+          <p className="text-sm mt-1">
+            No cost records available for this account.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

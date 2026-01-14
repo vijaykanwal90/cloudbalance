@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FilterSelection from "./FilterSelection";
@@ -7,7 +6,6 @@ import {  useSelector } from "react-redux";
 const SideFilter = ({ filterList }) => {
   const [openedFilter, setOpenedFilter] = useState(null);
   const [filterSelectionBox, setFilterSectionBox] = useState(false);
-  // const dispatch = useDispatch();
   const query = useSelector((state)=> state.query)
   const openFilterSelection = (filter) => {
     if (filter === openedFilter) {
@@ -40,12 +38,7 @@ const SideFilter = ({ filterList }) => {
     <div className="min-h-0">
       <div className={`flex justify-between font-bold items-center pt-2 `}>
         <span> Filters</span>
-        <button className="text-blue-800 cursor-pointer">
-          Reset All
-          <span>
-            <RestartAltIcon />
-          </span>
-        </button>
+        
       </div>
       <div>
         <ul>

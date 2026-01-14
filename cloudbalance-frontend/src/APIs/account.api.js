@@ -23,5 +23,8 @@ return axiosInstance.get('/account/my-accounts')
 const onboardAccountApi = (formData)=>{
 return axiosInstance.post('/account',formData)
 }
+const orphanAccountsApi = ()=>{
+      return axiosInstance.get('/account/orphan-account')
 
-export {getAllAccountsApi,getAccountByIdApi,assignAccountsApi,userAccountsApi,myAccountsApi,onboardAccountApi}
+}
+export {getAllAccountsApi,getAccountByIdApi,assignAccountsApi,userAccountsApi,myAccountsApi,onboardAccountApi, orphanAccountsApi}

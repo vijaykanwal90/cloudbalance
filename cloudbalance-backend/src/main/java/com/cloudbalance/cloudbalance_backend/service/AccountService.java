@@ -17,7 +17,7 @@ public interface AccountService {
     public ResponseEntity<?> assignAccounts(Long userId, AccountAssignDto accountAssignDto);
     public List<Account> userAccounts(Long userId);
     public List<Account> myAccounts();
-
+    public List<AccountResponseDto> getOrphanAccounts();
 
 
 }

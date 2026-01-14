@@ -21,11 +21,7 @@ const FilterSelection = ({
   };
 
   const handleApply = () => {
-    // setQuery((prev) => ({
-    //   ...prev,
-    //   [filter.key]: selectedSubFilters,
-    // }));
-   console.log(query)
+  
     dispatch(
       addToQuery({
         [filter.key]: selectedSubFilters,
@@ -75,15 +71,8 @@ const FilterSelection = ({
 
   return (
     <div className="z-50 bg-white min-h-0">
-      <span>No filters currently added.</span>
+     
 
-      <div>
-        <input
-          type="text"
-          className="border border-slate-400 px-2 py-1"
-          placeholder="Search"
-        />
-      </div>
 
       <span>Showing {subFilters.length} result</span>
 

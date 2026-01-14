@@ -58,8 +58,7 @@ public class AuthServiceImplementation implements AuthService {
         user.setLastLogin(Instant.now());
         userRepository.save(user);
         Long userId = user.getId();
-//              refreshTokenService.deleteRefreshToken()
-//            refreshTokenService.deleteByUserId(user.getId());
+
         RefreshToken refreshtoken = refreshTokenService.createRefreshToken(userId);
         String refreshTokenValue = refreshtoken.getToken();
         ResponseCookie accessToken = ResponseCookie.from("accessToken", accesstoken)

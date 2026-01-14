@@ -11,6 +11,10 @@ public class ApiErrorResponse {
     private String message;
     private Object errors;
 
+    public ApiErrorResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
     public ApiErrorResponse(int status, String message, Object errors) {
         this.status = status;
         this.message = message;

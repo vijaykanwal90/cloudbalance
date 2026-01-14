@@ -6,8 +6,7 @@ import { toast } from "sonner";
 import { loginApi } from "../APIs/auth.api";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../utils/formValidation";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCurrentUser } from "../redux/actions/auth-action";
+import {  useSelector } from "react-redux";
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -16,7 +15,6 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const { user, loading } = useSelector((state) => state.auth);
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -49,10 +47,12 @@ const Login = () => {
     try {
       const res = await loginApi(form);
       if (res.status === 200) {
+        console.log(res)
         toast.success("Login successful!");
         navigate("/dashboard", { replace: true });
       }
     } catch (error) {
+      console.log(error)
       toast.error(error?.response?.data?.errors || "Login failed");
     }
   };

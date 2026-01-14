@@ -112,4 +112,23 @@ public class AccountServiceImplmentation implements AccountService {
         return accounts;
 
     }
+    @Transactional
+    public List<AccountResponseDto> getOrphanAccounts(){
+        List<Account> accounts = accountRepository.findAll().stream().toList();
+        List<AccountResponseDto> orphanAccounts = accounts.stream().filter(account->
+                     account.getUsers().isEmpty()
+
+
+                ).map(account ->{
+                        AccountResponseDto response = new AccountResponseDto();
+                        response.setId(account.getId());
+                        response.setAccountId(account.getAccountId());
+                        response.setAccountARN(account.getAccountARN());
+                        response.setAccountName(account.getAccountName());
+            return response;
+    }
+        ).toList();
+
+        return orphanAccounts;
+    }
 }

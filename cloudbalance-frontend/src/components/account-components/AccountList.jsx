@@ -47,7 +47,6 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
       </div>
 
       <div className="  flex-1 flex flex-col overflow-hidden">
-        {/* SELECT ALL */}
         <div className="flex items-center border-b   text-sm text-gray-700">
           <Checkbox
             size="small"
