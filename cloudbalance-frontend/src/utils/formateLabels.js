@@ -1,4 +1,4 @@
-const formatKeyToLabel = (key) => {
+export const formatKeyToLabel = (key) => {
   if (!key) return "";
 
   // Replace underscores with spaces

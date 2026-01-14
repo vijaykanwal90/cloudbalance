@@ -13,7 +13,6 @@ import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
 Charts(FusionCharts);
 FusionTheme(FusionCharts);
 
-const graphTypes = ["bar-graph", "line-chart", "stacked-chart"];
 const CostGraphs = ({costData}) => {
   const formattedData = formatCostData(costData);
   const [graphType, setGraphType] = useState("bar-graph");

@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Menu, MenuItem } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TuneIcon from "@mui/icons-material/Tune";
-
+import { useDispatch, useSelector } from "react-redux";
+import { addToQuery } from "../../redux/actions/query-action";
 const CostGroupBy = ({
-  query,
-  setQuery,
+  
   sideFilterOpen,
   setSideFilterOpen,
   filterList,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const query = useSelector((state) => state.query);
+  const dispatch = useDispatch();
   const groupBy =
     filterList.find((f) => f.key === query.group) || filterList[0];
 
@@ -36,10 +37,8 @@ const CostGroupBy = ({
     return label;
   };
   const selectGroupBy = (option) => {
-    setQuery((prev) => ({
-      ...prev,
-      group: option.key,
-    }));
+   
+    dispatch(addToQuery({group:option.key}))
     setAnchorEl(null);
   };
 
@@ -60,15 +59,14 @@ const CostGroupBy = ({
       endDateInput.disabled = false;
     }
     if (startDateInput.value && endDateInput.value) {
-      setQuery((prev) => ({
-        ...prev,
+     
+      dispatch(addToQuery({
         startDate: startDateInput.value,
         endDate: endDateInput.value,
-      }));
+      }))
     }
   };
 
-  console.log("rendered ...");
   return (
     <div className="border-b bg-white px-4 py-3">
       <div className="flex justify-between items-center flex-wrap gap-2">
@@ -151,7 +149,7 @@ const CostGroupBy = ({
           </div>
         </div>
 
-        <div className="flex">
+        <div className="flex gap-2">
           <div className="border px-2 flex gap-2 text-blue-900 font-bold bg-white ">
             <input type="date" id="start-date" onChange={handleChange} />
             <span className="border"></span>

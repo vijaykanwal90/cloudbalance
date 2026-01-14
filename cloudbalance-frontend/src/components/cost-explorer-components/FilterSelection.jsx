@@ -2,27 +2,35 @@ import React, { useEffect, useState } from "react";
 import { getKeysOfGroupApi } from "../../APIs/cost.api";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { useDispatch, useSelector } from "react-redux";
+import { addToQuery } from "../../redux/actions/query-action";
 const FilterSelection = ({
   filter,
   filterSelectionBox,
   setFilterSectionBox,
   openedFilter,
   setOpenedFilter,
-  query,
-  setQuery,
 }) => {
   const [subFilters, setSubFilters] = useState([]);
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
+  const query = useSelector((state) => state.query);
+  const dispatch = useDispatch();
   const onClose = () => {
     setOpenedFilter(null);
     setFilterSectionBox(false);
   };
 
   const handleApply = () => {
-    setQuery((prev) => ({
-      ...prev,
-      [filter.key]: selectedSubFilters,
-    }));
+    // setQuery((prev) => ({
+    //   ...prev,
+    //   [filter.key]: selectedSubFilters,
+    // }));
+   console.log(query)
+    dispatch(
+      addToQuery({
+        [filter.key]: selectedSubFilters,
+      })
+    );
 
     setOpenedFilter(null);
     setFilterSectionBox(false);

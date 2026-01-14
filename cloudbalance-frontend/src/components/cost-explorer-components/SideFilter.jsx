@@ -3,10 +3,12 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FilterSelection from "./FilterSelection";
-const SideFilter = ({ filterList, query, setQuery }) => {
+import {  useSelector } from "react-redux";
+const SideFilter = ({ filterList }) => {
   const [openedFilter, setOpenedFilter] = useState(null);
   const [filterSelectionBox, setFilterSectionBox] = useState(false);
-
+  // const dispatch = useDispatch();
+  const query = useSelector((state)=> state.query)
   const openFilterSelection = (filter) => {
     if (filter === openedFilter) {
       setOpenedFilter(null);
@@ -29,7 +31,6 @@ const SideFilter = ({ filterList, query, setQuery }) => {
 
     return label;
   };
-
   const isFilterSelected = (key) => {
   const value = query?.[key];
   return Array.isArray(value) ? value.length > 0 : !!value;
@@ -88,8 +89,8 @@ const SideFilter = ({ filterList, query, setQuery }) => {
                     setFilterSectionBox={setFilterSectionBox}
                     openedFilter={openedFilter}
                     setOpenedFilter={setOpenedFilter}
-                    query={query}
-                    setQuery={setQuery}
+                   
+                    
                   />
                 )}
                 {filter != openedFilter && (

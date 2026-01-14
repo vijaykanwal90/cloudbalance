@@ -11,7 +11,7 @@ import { getCurrentUserApi } from "../../APIs/auth.api";
 
 const UserTable = () => {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, loading } = useSelector((data) => {
+  const { user } = useSelector((data) => {
     return data.auth;
   });
 

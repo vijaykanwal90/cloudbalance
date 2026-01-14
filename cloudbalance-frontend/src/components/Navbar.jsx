@@ -8,15 +8,23 @@ import { SidebarContext } from "../context/SidebarContext";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLogout } from "../hooks/useLogout";
 import { useDispatch, useSelector } from "react-redux";
-import { myAccountsApi ,getAllAccountsApi} from "../APIs/account.api";
+import { myAccountsApi, getAllAccountsApi } from "../APIs/account.api";
 import { getCurrentUserApi } from "../APIs/auth.api";
+import { addToQuery } from "../redux/actions/query-action";
 const Navbar = () => {
   // const navigate = useNavigate();
   const { isCollapased, toggleisCollapased } = useContext(SidebarContext);
+ const accountId = useSelector((state) => state.query.accountId);
+
+
+  const query = useSelector((data) => {
+    return data.query;
+  });
+  
   const logout = useLogout();
   const dispatch = useDispatch();
   const [userAccounts, setUserAccount] = useState([]);
-  const { user, isAuthenticated, loading } = useSelector((data) => {
+  const { user } = useSelector((data) => {
     return data.auth;
   });
 
@@ -24,30 +32,39 @@ const Navbar = () => {
     if (!user) {
       dispatch(getCurrentUserApi());
     }
-    console.log("user useEffect")
+    
   }, [user]);
- 
+
   useEffect(() => {
-  if (!user) return;
+    if (!user) return;
 
-  const fetchAccounts = async () => {
-    try {
-      const res =
-        user.role === "CUSTOMER"
-          ? await myAccountsApi()
-          : await getAllAccountsApi();
+    const fetchAccounts = async () => {
+      try {
+        const res =
+          user.role === "CUSTOMER"
+            ? await myAccountsApi()
+            : await getAllAccountsApi();
 
-      if (res.status === 200) {
-        setUserAccount(res.data);
+        if (res.status === 200) {
+          
+          setUserAccount(res.data);
+        }
+      } catch (error) {
+        console.error("Account fetch failed", error);
       }
-    } catch (error) {
-      console.error("Account fetch failed", error);
+    };
+
+    fetchAccounts();
+  }, [user]);
+  useEffect(() => {
+    if (userAccounts.length > 0 && !query.accountId) {
+      dispatch(
+        addToQuery({
+          accountId: userAccounts[0].accountId,
+        })
+      );
     }
-  };
-
-  fetchAccounts();
-}, [user]);
-
+  }, [userAccounts, query.accountId, dispatch]);
 
   return (
     <div className="w-full fixed top-0 left-0 flex justify-between py-4 px-6 h-16 bg-white shadow-gray-300 shadow-lg  z-30">
@@ -62,18 +79,20 @@ const Navbar = () => {
         {userAccounts.length > 0 && (
           <div className="flex flex-col">
             <label htmlFor="account">Account</label>
-            <select name="account" id="account">
-              {/* <option value="aws-1">aws-1</option>
-            <option value="aws-2">aws-2</option>
-            <option value="aws-3">aws-3</option> */}
-              {userAccounts &&
-                userAccounts.map((account) => {
-                  return (
-                    <option key={account.id} value={account.accountId}>
-                      {account.accountName}
-                    </option>
-                  );
-                })}
+            <select
+              name="account"
+              id="account"
+              value={accountId}
+              onChange={(e) =>
+                dispatch(addToQuery({ accountId: e.target.value }))
+              }
+              className="border rounded px-2 py-1"
+            >
+              {userAccounts.map((account) => (
+                <option key={account.id} value={account.accountId}>
+                  {account.accountName}
+                </option>
+              ))}
             </select>
           </div>
         )}
