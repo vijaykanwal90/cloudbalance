@@ -3,13 +3,13 @@ import React, { createContext, useState } from 'react';
 const SidebarContext = createContext()
 
 export const SidebarContextProvider = ({children})=>{
-      const [isCollapased, setisCollapased] = useState(false);
+      const [isCollapsed, setisCollapsed] = useState(false);
 
-      const toggleisCollapased = ()=>{
-        setisCollapased(previsCollapased => !previsCollapased);
+      const toggleisCollapsed = ()=>{
+        setisCollapsed(previsCollapsed => !previsCollapsed);
       }
     return (
-        <SidebarContext.Provider value={{isCollapased,toggleisCollapased}}>
+        <SidebarContext.Provider value={{isCollapsed,toggleisCollapsed}}>
             {children}
         </SidebarContext.Provider>
     )

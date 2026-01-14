@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
-
+@Transactional
     public User createUser(CreateUserDto request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw  new ResourceAlreadyExistException("User already exist with email " + request.getEmail());
@@ -65,7 +66,7 @@ public class UserServiceImplementation implements UserService {
 
         return dto;
     }
-
+   @Transactional
     public UpdateUserResponseDto updateUser(Long id, UpdateUserDto request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(

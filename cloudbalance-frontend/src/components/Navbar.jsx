@@ -13,7 +13,7 @@ import { getCurrentUserApi } from "../APIs/auth.api";
 import { addToQuery } from "../redux/actions/query-action";
 const Navbar = () => {
   // const navigate = useNavigate();
-  const { isCollapased, toggleisCollapased } = useContext(SidebarContext);
+  const { isCollapsed, toggleisCollapsed } = useContext(SidebarContext);
  const accountId = useSelector((state) => state.query.accountId);
 
 
@@ -72,9 +72,9 @@ const Navbar = () => {
         <div className="mx-auto relative">
           <img src="/cloudkeeper_logo.svg" alt="Cloudkeeper" />
         </div>
-        <button className="text-sky-700" onClick={toggleisCollapased}>
-          {isCollapased ? <MenuIcon /> : <CloseIcon />}
-          {/* <isCollapasedIcon /> */}
+        <button className="text-sky-700 cursor-pointer" onClick={toggleisCollapsed}>
+          {isCollapsed ? <MenuIcon /> : <CloseIcon />}
+          {/* <isCollapsedIcon /> */}
         </button>
         {userAccounts.length > 0 && (
           <div className="flex flex-col">
@@ -113,7 +113,7 @@ const Navbar = () => {
         </div>
 
         <button
-          className="text-blue-800 border-2 rounded-md px-2  font-bold cursor-pointer  hover:bg-sky-[#F2F9FF] hover:shadow-md shadow-gray-500 hover:border-transparent  box-border"
+          className="text-sky-700 border-2 rounded-md px-2  font-bold cursor-pointer  hover:bg-sky-[#F2F9FF] hover:shadow-md shadow-gray-500 hover:border-transparent  box-border"
           onClick={logout}
         >
           <span>

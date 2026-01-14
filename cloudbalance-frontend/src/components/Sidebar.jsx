@@ -4,6 +4,7 @@ import { SidebarContext } from "../context/SidebarContext";
 import PersonIcon from "@mui/icons-material/Person";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import CloudIcon from '@mui/icons-material/Cloud';
 import { useSelector } from "react-redux";
 import { all } from "axios";
 const sidebarList = [
@@ -30,7 +31,7 @@ const sidebarList = [
   },
   {
     id: 4,
-    icon: <DashboardIcon />,
+    icon: <CloudIcon />,
     path: "/dashboard/aws-services",
     label: "AWS Services ",
     allowedRoles: ["ADMIN", "READ_ONLY", "CUSTOMER"],
@@ -38,7 +39,7 @@ const sidebarList = [
 ];
 
 const Sidebar = () => {
-  const { isCollapased } = useContext(SidebarContext);
+  const { isCollapsed } = useContext(SidebarContext);
   const { user, isAuthenticated, loading } = useSelector((data) => {
     return data.auth;
   });
@@ -49,7 +50,7 @@ const Sidebar = () => {
   return (
     <>
       <div
-        className={`${isCollapased ? " w-20" : " opacity-100 w-64"}
+        className={`${isCollapsed ? " w-20" : " opacity-100 w-64"}
         } bg-white  z-10 border-r-2 border-gray-500 relative h-full transition-all duration-300 ease-in-out whitespace-nowrap
     overflow-hidden `}
       >
@@ -65,7 +66,7 @@ const Sidebar = () => {
               key={item.id}
             >
               {item.icon}
-              <span className={isCollapased ? "hidden" : ""}>{item.label}</span>
+              <span className={isCollapsed ? "hidden" : ""}>{item.label}</span>
             </NavLink>
           ))}
         </ul>

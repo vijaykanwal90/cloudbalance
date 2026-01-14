@@ -11,7 +11,7 @@ import { breadCrumEnumLink } from '../Enums/BreadCrumLinks';
     .slice(1)
     .filter((path) => !isDynamicParam(path));
   return (
-    <nav className='border-b-2 border-gray-400'>
+    <nav className='border-b-2 text-sky-700 font-bold  border-gray-400'>
       
       {pathnames.map((path, index) => {
         const to = `/${pathnames.slice(0, index + 1).join('/')}`;

@@ -45,7 +45,7 @@ const UserTable = () => {
       {user?.role === "ADMIN" && (
         <div className="flex gap-4 mb-4">
           <Link to="/dashboard/user-management/adduser">
-            <button className="px-4 py-2 bg-sky-600 rounded-md text-white cursor-pointer">
+            <button className="px-4 py-2 bg-sky-800 rounded-md text-white cursor-pointer">
               Add User
             </button>
           </Link>

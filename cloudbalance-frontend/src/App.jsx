@@ -7,6 +7,8 @@ import { Toaster } from "sonner";
 import Home from "./pages/Home";
 import { useUserActivity } from "../src/hooks/useUserActivity";
 import { useLogout } from "../src/hooks/useLogout";
+import NotFound from "./pages/NotFound";
+
 function App() {
   const logout = useLogout();
 
@@ -22,6 +24,7 @@ function App() {
         <Route path="/dashboard/*" element={<ProtectedRoutes />}></Route>
 
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

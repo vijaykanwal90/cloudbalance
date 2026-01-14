@@ -1,13 +1,13 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import LoginFooter from "../components/footers/LoginFooter";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
-import {loginApi} from '../APIs/auth.api'
+import { loginApi } from "../APIs/auth.api";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../utils/formValidation";
 import { useDispatch } from "react-redux";
-import {getCurrentUserApi} from "../APIs/auth.api"
+import { getCurrentUserApi } from "../APIs/auth.api";
 const Login = () => {
   const [form, setForm] = useState({
     email: "admin@gmail.com",
@@ -28,42 +28,53 @@ const Login = () => {
       setForm((prev) => ({ ...prev, password: value }));
     }
   };
-  
-  function validatePassword(password) {
-    password = password.trim();
 
-    if (password.length === 0) {
+  const validateForm = ({ email, password }) => {
+    let isValid = true;
+
+    // Trim inputs
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    // Email validation
+    if (!validateEmail(trimmedEmail)) {
+      toast.error("Email is not valid");
+      isValid = false;
+      return isValid;
+    }
+
+    // Password validation
+    if (trimmedPassword.length === 0) {
       toast.error("Password can't be empty");
-      return false;
+      isValid = false;
+      return isValid;
+    } else if (trimmedPassword.length < 6) {
+      toast.error("Password should be at least 6 characters");
+      isValid = false;
+      return isValid;
     }
-    if (password.length < 6) {
-      toast.error("Password should be greater than 8");
-      return false;
-    }
-    return true;
-  }
+
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isEmailValid = validateEmail(form.email);
-    if (!isEmailValid) {
-      return;
-    }
-    const isPasswordValid = validatePassword(form.password);
-
-    if (!isPasswordValid) {
+    if (!validateForm(form)) {
       return;
     }
     try {
-       const res = await loginApi(form)
-     if(res.status==200){
-      dispatch(getCurrentUserApi());
-      navigate("/dashboard");
-     }
-      
-      toast.success("email and password are valid");
+      const res = await loginApi(form);
+      if (res.status == 200) {
+        dispatch(getCurrentUserApi());
+        navigate("/dashboard");
+      }
+      console.log(res);
+      toast.success(res?.data);
     } catch (error) {
-      toast.error(error.message);
+      let message = error.response.data.errors;
+
+      toast.error(message);
     }
   };
   // useEffect(() => {}, [ navigate]);
@@ -78,7 +89,7 @@ const Login = () => {
           <div className="w-full">
             <label htmlFor="">Email</label>
             <input
-              className=" w-full py-1 border-2 border-gray-300"
+              className=" w-full py-1  px-2 border-2 border-gray-300"
               type="email"
               name="email"
               onChange={handleChange}
@@ -88,7 +99,7 @@ const Login = () => {
           <div className="w-full relative">
             <label htmlFor="password">Password</label>
             <input
-              className="w-full py-1 border-2 border-gray-300"
+              className="w-full px-2 py-1 border-2 border-gray-300"
               type={showPassword ? "text" : "password"}
               name="password"
               onChange={handleChange}
@@ -104,7 +115,7 @@ const Login = () => {
           </div>
 
           <button
-            className="w-full text-white  bg-sky-600  py-2 mt-2"
+            className="w-full text-white  bg-sky-600  py-2 mt-2 cursor-pointer"
             type="submit"
           >
             Login
