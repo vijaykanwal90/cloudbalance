@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+
 import java.util.*;
 
 @Repository
@@ -45,25 +45,24 @@ public class CostRepository {
 
         sql.append("SELECT ")
                 .append("TO_CHAR(BILL_DATE, 'YYYY-MM') AS month, ")
-                .append("\"").append(groupBy).append("\"")  // Escape groupBy column if it is a reserved keyword
+                .append("\"").append(groupBy).append("\"") 
                 .append(" AS group_value, ")
                 .append("SUM(COST) AS total_cost ")
                 .append("FROM COSTREPORT ")
                 .append("WHERE 1=1 ");
 
-        // 🔹 Filter by accountId (if provided)
         if (accountId != null && !accountId.isBlank()) {
             sql.append(" AND ACCOUNT_ID = ?");
             params.add(accountId);
         }
 
-        // 🔹 Filter by group values (handle each group dynamically)
+
         if (filters != null && !filters.isEmpty()) {
             for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
                 String filter = entry.getKey();
                 List<String> values = entry.getValue();
 
-                // Dynamically handle each filter group (e.g., 'service', 'platform', etc.)
+
                 if (values != null && !values.isEmpty()) {
                     sql.append(" AND \"").append(filter).append("\" IN (");
                     for (int i = 0; i < values.size(); i++) {
@@ -78,7 +77,7 @@ public class CostRepository {
             }
         }
 
-        // 🔹 Date range (between start & end)
+
         if (startDate != null) {
             sql.append(" AND BILL_DATE >= ?");
             params.add(startDate);
@@ -88,14 +87,12 @@ public class CostRepository {
             sql.append(" AND BILL_DATE <= ?");
             params.add(endDate);
         }
-
-        // Fix GROUP BY clause formatting and ensure no syntax error
         sql.append(String.format("""
     GROUP BY TO_CHAR(BILL_DATE, 'YYYY-MM'), "%s"
     ORDER BY month
     """, groupBy));
 
-        // Execute the query using jdbcTemplate and return the results
+
         log.info(sql.toString());
         log.info(params.toArray().toString());
         return jdbcTemplate.queryForList(sql.toString(), params.toArray());

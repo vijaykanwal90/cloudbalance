@@ -3,13 +3,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import Checkbox from "@mui/material/Checkbox";
 
 const AccountList = ({ title, accounts, selected, setSelected }) => {
-  const [search, setSearch] = useState("");
 
-  const filteredAccounts = useMemo(() => {
-    return accounts.filter((acc) =>
-      acc.accountName.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [accounts, search]);
+  // const filteredAccounts = useMemo(() => {
+  //   return accounts.filter((acc) =>
+  //     acc.accountName.toLowerCase().includes(search.toLowerCase())
+  //   );
+  // }, [accounts, ]);
 
   const selectedIds = useMemo(
     () => new Set(selected.map((acc) => acc.id)),
@@ -17,14 +16,14 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
   );
 
   const isAllSelected =
-    filteredAccounts.length > 0 &&
-    filteredAccounts.every((acc) => selectedIds.has(acc.id));
+    accounts.length > 0 &&
+    accounts.every((acc) => selectedIds.has(acc.id));
 
   const toggleSelectAll = () => {
     if (isAllSelected) {
       setSelected([]);
     } else {
-      setSelected(filteredAccounts);
+      setSelected(accounts);
     }
   };
 
@@ -63,7 +62,7 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
         {/* LIST */}
         <div className="flex-1 overflow-y-auto pr-1">
           <ul className="space-y-1">
-            {filteredAccounts.map((account) => {
+            {accounts.map((account) => {
               const isSelected = selectedIds.has(account.id);
 
               return (
@@ -88,7 +87,7 @@ const AccountList = ({ title, accounts, selected, setSelected }) => {
               );
             })}
 
-            {filteredAccounts.length === 0 && (
+            {accounts.length === 0 && (
               <li className="text-sm text-gray-400 text-center py-8">
                 No accounts found
               </li>
