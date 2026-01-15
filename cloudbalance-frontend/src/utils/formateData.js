@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const formatCostData = (rawData) => {
  
     const months = rawData.data.map(item => item.month);
@@ -18,6 +20,7 @@ export const formatCostData = (rawData) => {
   })
 }));
 
+    const formatDate = (dateString) => dayjs(dateString).format("MMM YYYY");
   
 const categories = [
   {
@@ -25,7 +28,7 @@ const categories = [
       
 
       return {
-        label: month
+        label: formatDate(month)
       };
     })
   }

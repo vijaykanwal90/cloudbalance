@@ -4,6 +4,7 @@ import com.cloudbalance.cloudbalance_backend.dto.*;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
 import com.cloudbalance.cloudbalance_backend.exception.AuthenticationCredentialsNotFoundException;
+import com.cloudbalance.cloudbalance_backend.exception.BadRequestException;
 import com.cloudbalance.cloudbalance_backend.exception.ResourceAlreadyExistException;
 import com.cloudbalance.cloudbalance_backend.exception.ResourceNotFoundException;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
@@ -73,16 +74,17 @@ public class UserServiceImplementation implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id: " + id
                 ));
-        Long currentUserId = getCurrentUserId();
-        if (currentUserId.equals(id)) {
-            throw new RuntimeException("You are not allowed to update your own profile");
-        }
+
 
         if (request.getFirstName() != null && !request.getFirstName().isBlank()) {
             user.setFirstName(request.getFirstName());
         }
 
         if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            Long currentUserId = getCurrentUserId();
+            if (currentUserId.equals(id)) {
+                throw new BadRequestException("You are not allowed to update your own email");
+            }
             user.setEmail(request.getEmail());
         }
 
@@ -91,6 +93,10 @@ public class UserServiceImplementation implements UserService {
         }
 
         if (request.getRole() != null && !request.getRole().isBlank()) {
+            Long currentUserId = getCurrentUserId();
+            if (currentUserId.equals(id)) {
+                throw new BadRequestException("You are not allowed to update your role");
+            }
             user.setRole(Role.valueOf(request.getRole().toUpperCase()));
         }
 

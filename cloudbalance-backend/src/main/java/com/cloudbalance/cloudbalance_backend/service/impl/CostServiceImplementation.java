@@ -27,7 +27,7 @@ public class CostServiceImplementation implements CostService {
         String endDate = allParams.getFirst("endDate");
 
         if(accountId==null || accountId.isBlank()){
-            throw new BadRequestException("Account Id is reqquired to fetch cost");
+            throw new BadRequestException("Account Id is required to fetch cost");
         }
         Map<String, List<String>> filters = new HashMap<>();
 

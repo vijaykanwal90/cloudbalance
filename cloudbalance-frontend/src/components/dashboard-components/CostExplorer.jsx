@@ -20,7 +20,6 @@ const CostExplorer = () => {
   const filterList = [
     { key: "SERVICE" },
     { key: "INSTANCE_TYPE" },
-    // { key: "ACCOUNT_ID" },
     { key: "USAGE_TYPE" },
     { key: "PLATFORM" },
     { key: "REGION" },

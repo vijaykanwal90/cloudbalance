@@ -97,8 +97,6 @@ public class CostRepository {
     """, groupBy));
 
 
-        log.info(sql.toString());
-        log.info(params.toArray().toString());
         return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 
