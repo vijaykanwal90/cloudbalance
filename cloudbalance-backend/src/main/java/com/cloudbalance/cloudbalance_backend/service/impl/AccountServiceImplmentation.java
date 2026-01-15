@@ -10,12 +10,11 @@ import com.cloudbalance.cloudbalance_backend.exception.ResourceNotFoundException
 import com.cloudbalance.cloudbalance_backend.repository.AccountRepository;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
 import com.cloudbalance.cloudbalance_backend.service.AccountService;
-import com.cloudbalance.cloudbalance_backend.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +60,7 @@ public class AccountServiceImplmentation implements AccountService {
         newAccount.setAccountARN(createAccountDto.getAccountARN());
         newAccount.setAccountName(createAccountDto.getAccountName());
         accountRepository.save(newAccount);
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(201).body("Account on boarded successfully");
     }
 
     @Override
@@ -70,9 +69,9 @@ public class AccountServiceImplmentation implements AccountService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with userid " + userId));
         List<Long> requestedIds = accountAssignDto.getAccountIds();
         user.getAccounts().clear();
-        if(requestedIds==null || requestedIds.size() ==0){
+        if(requestedIds==null || requestedIds.isEmpty()){
             userRepository.save(user);
-            return ResponseEntity.status(200).body("done");
+            return ResponseEntity.status(200).body("No AccountId present  to assign");
         }
         List<Account> accounts = accountRepository.findAllById(requestedIds);
         Set<Long> foundIds = accounts.stream()

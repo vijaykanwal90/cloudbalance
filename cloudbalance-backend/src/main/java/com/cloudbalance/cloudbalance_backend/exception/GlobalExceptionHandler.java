@@ -68,6 +68,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(response);
     }
 
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthenticationCredentialsNotFoundException(AuthenticationCredentialsNotFoundException ex) {
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+
+        return ResponseEntity.status(400).body(response);
+    }
     @ExceptionHandler(ResourceAlreadyExistException.class)
     public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExist(ResourceAlreadyExistException ex) {
         ApiErrorResponse response = new ApiErrorResponse(

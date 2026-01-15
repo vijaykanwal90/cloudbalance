@@ -84,7 +84,6 @@ public class AuthServiceImplementation implements AuthService {
     @Transactional
     public ResponseEntity<?> logout(String refreshToken) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = user.getId();
         refreshTokenService.deleteRefreshToken(refreshToken);
 
         ResponseCookie accessTokenCookie = ResponseCookie

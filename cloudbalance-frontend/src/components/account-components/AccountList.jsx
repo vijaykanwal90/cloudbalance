@@ -1,15 +1,9 @@
-import React, { useMemo, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import React, { useMemo } from "react";
 import Checkbox from "@mui/material/Checkbox";
 
 const AccountList = ({ title, accounts, selected, setSelected }) => {
 
-  // const filteredAccounts = useMemo(() => {
-  //   return accounts.filter((acc) =>
-  //     acc.accountName.toLowerCase().includes(search.toLowerCase())
-  //   );
-  // }, [accounts, ]);
-
+  
   const selectedIds = useMemo(
     () => new Set(selected.map((acc) => acc.id)),
     [selected]

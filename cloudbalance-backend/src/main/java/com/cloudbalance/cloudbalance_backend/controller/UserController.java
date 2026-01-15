@@ -40,7 +40,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser( @Valid @RequestBody CreateUserDto createUserDto){
 
-        System.out.println(createUserDto);
+
           userService.createUser(createUserDto);
           return ResponseEntity.status(201).build();
     }

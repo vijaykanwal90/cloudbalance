@@ -16,7 +16,7 @@ axiosInstance.interceptors.response.use(
 
   async (error) => {
     const originalRequest = error.config;
-     console.log(originalRequest)
+    console.log(originalRequest);
     if (!originalRequest) {
       redirectToLogin();
       return Promise.reject(error);
@@ -24,9 +24,9 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      originalRequest.url?.includes("/auth/logout")
+      (originalRequest.url?.includes("/auth/logout") ||
+        originalRequest.url?.includes("auth/login"))
     ) {
-     
       redirectToLogin();
       return Promise.reject(error);
     }
@@ -42,9 +42,7 @@ axiosInstance.interceptors.response.use(
         await refreshTokensApi();
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        
-          await logoutApi();
-       
+        // await logoutApi();
 
         redirectToLogin();
         return Promise.reject(refreshError);

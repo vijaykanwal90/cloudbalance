@@ -3,6 +3,7 @@ package com.cloudbalance.cloudbalance_backend.service.impl;
 import com.cloudbalance.cloudbalance_backend.dto.*;
 import com.cloudbalance.cloudbalance_backend.entity.Role;
 import com.cloudbalance.cloudbalance_backend.entity.User;
+import com.cloudbalance.cloudbalance_backend.exception.AuthenticationCredentialsNotFoundException;
 import com.cloudbalance.cloudbalance_backend.exception.ResourceAlreadyExistException;
 import com.cloudbalance.cloudbalance_backend.exception.ResourceNotFoundException;
 import com.cloudbalance.cloudbalance_backend.repository.UserRepository;
@@ -133,7 +134,7 @@ public class UserServiceImplementation implements UserService {
                 .getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("User not authenticated");
+            throw new AuthenticationCredentialsNotFoundException("User not authenticated");
         }
 
         User user = (User) authentication.getPrincipal();

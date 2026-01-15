@@ -1,5 +1,6 @@
 package com.cloudbalance.cloudbalance_backend.repository;
 
+import com.cloudbalance.cloudbalance_backend.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,8 +37,8 @@ public class CostRepository {
             String endDate
     ) {
 
-        if (groupBy == null || groupBy.isBlank()) {
-            throw new IllegalArgumentException("Invalid group by column");
+        if (groupBy == null || groupBy.isBlank()  || !ALLOWED_COLUMNS.contains(groupBy)) {
+            throw new BadRequestException("Invalid group by column");
         }
 
         StringBuilder sql = new StringBuilder();
@@ -45,7 +46,7 @@ public class CostRepository {
 
         sql.append("SELECT ")
                 .append("TO_CHAR(BILL_DATE, 'YYYY-MM') AS month, ")
-                .append("\"").append(groupBy).append("\"") 
+                .append("\"").append(groupBy).append("\"")
                 .append(" AS group_value, ")
                 .append("SUM(COST) AS total_cost ")
                 .append("FROM COSTREPORT ")
@@ -60,6 +61,9 @@ public class CostRepository {
         if (filters != null && !filters.isEmpty()) {
             for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
                 String filter = entry.getKey();
+                if(!ALLOWED_COLUMNS.contains(filter)){
+                    throw new BadRequestException("Invalid filter value");
+                }
                 List<String> values = entry.getValue();
 
 
